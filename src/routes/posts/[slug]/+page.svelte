@@ -1,14 +1,8 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import 'katex/dist/katex.min.css';
 	import { DateTime, Interval } from 'luxon';
 	export let data: PageData;
-
-	const getFirstSome = (post: string) => {
-		return '나중에';
-		// const parser = new DOMParser();
-		// const doc = parser.parseFromString(post, 'text/html');
-		// return doc.getElementsByTagName('p')[0].innerText?.slice(0, 80) ?? '';
-	};
 
 	const addAge = (createdAt: Date): string => {
 		const birthDate: DateTime = DateTime.local(1989, 12, 23, 0, 0, 0);
@@ -23,19 +17,15 @@
 	<title>{data.pageTitle}</title>
 </svelte:head>
 
-<div class="bg-gray-200">
-	<input type="text" placeholder="Search" name="" id="" />
-	{#each data.posts as post}
-		<div>
-			<div>
-				<a href={`/posts/${post.id}`}>{post.title}</a>
-			</div>
-			<div class="text-4xl">
-				{addAge(post.created_at)}
-			</div>
-			<div>
-				{getFirstSome(post.post)}
-			</div>
-		</div>
-	{/each}
+<div>
+	{data.post.title}
 </div>
+<div>
+	{addAge(data.post.created_at)}
+</div>
+<div>
+	{@html data.post.post}
+</div>
+
+<style>
+</style>
