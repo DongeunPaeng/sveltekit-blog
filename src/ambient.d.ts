@@ -6,4 +6,5 @@ interface Post {
 	created_at: Date;
 	status: number;
 	type: number;
+	preview?: string;
 }
