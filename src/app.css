@@ -6,6 +6,10 @@
 	color: rgb(31 41 55);
 }
 
-.topnavbar-links {
-	@apply hover:underline hover:text-blue-800 py-2 rounded-md sm:text-base font-medium;
+p a {
+	@apply text-blue-600;
+}
+
+.menu {
+	@apply hover:underline hover:text-blue-800 rounded-md sm:text-base font-medium;
 }

@@ -9,11 +9,16 @@ const connection = await mysql.createConnection({
 });
 
 export const getPosts = async () => {
-	const [rows] = await connection.execute(`select * from posts where status = 0;`);
+	const [rows] = await connection.execute(`select * from posts where status = 0`);
 	return rows;
 };
 
 export const getDrafts = async () => {
-	const [rows] = await connection.execute(`select * from posts where status != 0;`);
+	const [rows] = await connection.execute(`select * from posts where status != 0`);
+	return rows;
+};
+
+export const getUser = async (email: string) => {
+	const [rows] = await connection.execute(`select * from users where email = ?`); // TODO: how to pass an arg?
 	return rows;
 };
