@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
 
-const drafts = await db.getDrafts();
+const drafts = (await db.getDrafts()) as Post[];
 
 export const load: PageServerLoad = async () => {
 	return {

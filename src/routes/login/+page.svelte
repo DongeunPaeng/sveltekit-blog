@@ -6,10 +6,10 @@
 	<title>Dongeun Paeng | Login</title>
 </svelte:head>
 
-<!-- TODO: cf. page.server.ts -->
+<!-- TODO: how to redirect according to the response? -->
 <div class="min-h-screen flex items-start justify-center py-12 px-4 sm:px-6 lg:px-8">
 	<div class="max-w-md w-full space-y-8">
-		<h2 class="text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
+		<h2 class="text-center text-3xl font-extrabold text-gray-900">어서오세요! 반가워요 👋</h2>
 		<div>
 			<form method="post" class="mt-8 space-y-6" action="?/login">
 				<div class="rounded-md -space-y-px">
@@ -35,7 +35,7 @@
 							name="password"
 						/>
 						{#if form?.incorrect}<div class="ml-3 mt-2 mb-6 text-red-500 text-xs">
-								입력하신 정보가 올바르지 않아요.
+								{form.message}
 							</div>
 						{:else}
 							<div class="ml-3 mt-2 mb-6 text-red-500 text-xs" />
