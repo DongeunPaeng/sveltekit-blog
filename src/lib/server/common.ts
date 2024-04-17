@@ -26,6 +26,7 @@ export const verifyPassword = (passwordAttempt: string, hashedPassword: string) 
 
 // TODO: VerificationType is not defined. How do I use global types in SvelteKit? I can't search how to.
 export const createToken = (user: User, type: VerificationType) => {
+	console.log('creating token...');
 	const payload = { sub: user.id, email: user.email };
 	const token = jwt.sign(payload, JWT_SECRET, {
 		algorithm: 'HS256',

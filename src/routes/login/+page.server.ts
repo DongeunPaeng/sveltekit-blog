@@ -25,6 +25,7 @@ export const actions = {
 				maxAge: 168 * 60 * 60 * 1000, // FIXME: I want to manage this as a global variable.
 				httpOnly: true
 			});
+			console.log(accessToken, refreshToken);
 			return { success: true, data: { user, accessToken, accessTokenExpiresAt } };
 		} catch (error) {
 			console.log(error);
