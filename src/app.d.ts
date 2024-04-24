@@ -23,10 +23,6 @@ declare global {
 		length: number;
 		deleted: Deleted;
 	}
-	enum VerificationType {
-		REFRESH = 'refresh',
-		ACCESS = 'access'
-	}
 	namespace App {
 		interface PageData {
 			pageTitle: string;

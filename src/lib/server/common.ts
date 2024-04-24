@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { jwtDecode } from 'jwt-decode';
 import { JWT_SECRET } from '$env/static/private';
+import { VerificationType } from '$types';
 
 export const verifyPassword = (passwordAttempt: string, hashedPassword: string) =>
 	bcrypt.compare(passwordAttempt, hashedPassword);
@@ -19,14 +20,11 @@ export const verifyPassword = (passwordAttempt: string, hashedPassword: string) 
 // 	jwt.verify(token, process.env.JWT_SECRET ?? '', async (err: any, user: any) => {
 // 		if (err) return fail(403, { notAuthorized: true, message: '권한이 없습니다.' });
 // 		req.user = user;
-// 		// TODO: is this a SvelteKit way? How do I setup a middleware?
 // 		next();
 // 	});
 // };
 
-// TODO: VerificationType is not defined. How do I use global types in SvelteKit? I can't search how to.
 export const createToken = (user: User, type: VerificationType) => {
-	console.log('creating token...');
 	const payload = { sub: user.id, email: user.email };
 	const token = jwt.sign(payload, JWT_SECRET, {
 		algorithm: 'HS256',

@@ -2,6 +2,7 @@ import { fail } from '@sveltejs/kit';
 import * as db from '$lib/server/database';
 import { createToken, verifyPassword } from '$lib/server/common';
 import { jwtDecode } from 'jwt-decode';
+import { VerificationType } from '$types';
 
 /** @type {import('./$types').Actions} */
 export const actions = {
@@ -25,7 +26,6 @@ export const actions = {
 				maxAge: 168 * 60 * 60 * 1000, // FIXME: I want to manage this as a global variable.
 				httpOnly: true
 			});
-			console.log(accessToken, refreshToken);
 			return { success: true, data: { user, accessToken, accessTokenExpiresAt } };
 		} catch (error) {
 			console.log(error);
