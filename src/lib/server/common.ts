@@ -1,14 +1,12 @@
-import { fail } from '@sveltejs/kit';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { jwtDecode } from 'jwt-decode';
 import { JWT_SECRET } from '$env/static/private';
 import { VerificationType } from '$types';
 
-export const verifyPassword = (passwordAttempt: string, hashedPassword: string) =>
+export const verifyPassword = (passwordAttempt: string, hashedPassword: string): Promise<boolean> =>
 	bcrypt.compare(passwordAttempt, hashedPassword);
 
-// TODO: is this a SvelteKit way?
+// TODO: Where do I use it? See the original project. And then, find how to implement in SvelteKit way.
 // export const verifyToken = (req, next) => {
 // 	const authHeader = req.headers['authorization'];
 // 	const token = authHeader && authHeader.split(' ')[1];
@@ -26,10 +24,9 @@ export const verifyPassword = (passwordAttempt: string, hashedPassword: string) 
 
 export const createToken = (user: User, type: VerificationType) => {
 	const payload = { sub: user.id, email: user.email };
-	const token = jwt.sign(payload, JWT_SECRET, {
+	return jwt.sign(payload, JWT_SECRET, {
 		algorithm: 'HS256',
 		// expiration of access token is very short, while refresh token remains long.
 		expiresIn: type === VerificationType.REFRESH ? '168h' : '1h'
 	});
-	return token;
 };
