@@ -1,5 +1,29 @@
-<script>
+<script lang="ts">
+	import { goto } from '\$app/navigation';
 	export let form;
+	const login = async (event: { currentTarget: EventTarget & HTMLFormElement }) => {
+		const submitData = new FormData(event.currentTarget)
+		const response = await fetch(event.currentTarget.action, {
+		  method: 'POST',
+		  body: submitData,
+		})
+		const result = await response.json()
+		const data = JSON.parse(result.data)
+
+		// TODO: The below lines suck... I know. But I couldn't find a better bypass
+		// TODO: Let's find another way that uses enhance
+		const isSuccessful = data[0]['success'] !== undefined
+		if(isSuccessful) {
+			const user = data[2]
+			const accessToken = data[3]
+			const accessTokenExpiresAt = data[4]
+			// TODO: save the above information in the store.
+			await goto('/')
+		} else {
+			const errorMessage = data[2]
+			alert(errorMessage)
+		}
+	}
 </script>
 
 <svelte:head>
@@ -10,7 +34,7 @@
 	<div class="max-w-md w-full space-y-8">
 		<h2 class="text-center text-3xl font-extrabold text-gray-900">어서오세요! 반가워요 👋</h2>
 		<div>
-			<form method="post" class="mt-8 space-y-6">
+			<form on:submit|preventDefault={login} class="mt-8 space-y-6">
 				<div class="rounded-md -space-y-px">
 					<div>
 						<label for="email" class="sr-only">Email address</label>
