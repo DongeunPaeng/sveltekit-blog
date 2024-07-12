@@ -34,6 +34,7 @@ export const actions = {
 			httpOnly: true
 		});
 
+		console.log('ready to call redirect');
 		return { success: true, user: user.email, accessToken, accessTokenExpiresAt };
 	}
 };
