@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { DateTime, Interval } from 'luxon';
+
 	export let data: PageData;
 
 	const addAge = (createdAt: Date): string => {
@@ -35,6 +36,7 @@
 			</div>
 			<div id="post_preview" class="text-sm text-gray-600">
 				{post.preview}
+				<a href={`/posts/${post.id}`} class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">더 보기</a>
 			</div>
 		</div>
 	{/each}

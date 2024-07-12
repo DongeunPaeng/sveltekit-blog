@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '\$app/navigation';
 	import { applyAction, enhance } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
 
 	export let form;
 </script>
@@ -13,9 +14,9 @@
 	<div class="max-w-md w-full space-y-8">
 		<h2 class="text-center text-3xl font-extrabold text-gray-900">어서오세요! 반가워요 👋</h2>
 		<div>
-			<form method="POST" use:enhance={() => async ({result}) => {
+			<form method="POST" action="?/login" use:enhance={() => async ({result}) => {
 				if (result.type === 'success') {
-					await goto('/')
+					await goto('/', { invalidateAll: true })
 				} else {
 					await applyAction(result)
 				}

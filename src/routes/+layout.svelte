@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { LayoutServerData } from './$types';
 	import '../app.css';
+
 	export let data: LayoutServerData;
 </script>
 
@@ -12,15 +13,19 @@
 	<div id="top_nav" class="w-full">
 		<a class="font-extrabold" href="/">Dongeun Paeng</a>
 		<div id="menu" class="mt-4 items-center sm:flex sm:justify-between">
-			{#if true}
+			{#if data.loggedIn}
 				<a class="text-gray-400 py-2 menu" href="/draft">Draft</a>
 			{:else}
 				<div />
 			{/if}
-			<div class="py-2">
-				<a class="mr-4 menu" href="/write">Write</a>
-				<a class="menu" href="/write">Logout</a>
-			</div>
+			{#if data.loggedIn}
+				<form class="menu" method="POST" action="/auth?/logout">
+					<div class="py-2">
+						<a class="mr-4 menu" href="/write">Write</a>
+						<button>Logout</button>
+					</div>
+				</form>
+			{/if}
 		</div>
 	</div>
 	<div id="slot" class="w-full">

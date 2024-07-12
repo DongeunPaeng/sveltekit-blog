@@ -1,4 +1,4 @@
-export enum VerificationType {
-		REFRESH = 'refresh',
-		ACCESS = 'access'
+export enum Temp {
+	TEMP_ONE = 'one',
+	TEMP_TWO = 'two'
 }

@@ -1,12 +1,17 @@
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import * as db from '$lib/server/database';
-import { createToken, verifyPassword } from '$lib/server/common';
+import { createToken, verifyPassword, verifyToken } from '$lib/server/common';
 import { jwtDecode } from 'jwt-decode';
-import { VerificationType } from '$types';
+import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes/draft/$types';
+
+export const load: PageServerLoad = async ({ cookies }) => {
+	const user_token = cookies.get('user_token') || '';
+	if (verifyToken(user_token)) throw redirect(307, '/');
+};
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	default: async ({ request, cookies }) => {
+	login: async ({ request, cookies }) => {
 		// Get data
 		const data = await request.formData();
 		const email = data.get('email') as string;
@@ -24,17 +29,17 @@ export const actions = {
 			return fail(403, { incorrect: true, message: '비밀번호가 일치하지 않아요.' });
 
 		// Create tokens
-		const refreshToken = createToken(user, VerificationType.REFRESH);
-		const accessToken = createToken(user, VerificationType.ACCESS);
-		const accessTokenExpiresAt = jwtDecode(accessToken).exp;
+		const token = createToken(user);
+		const tokenExpiresAt = jwtDecode(token).exp;
 
 		// Set the tokens in a cookie
-		cookies.set('refresh_token', refreshToken, {
-			maxAge: 168 * 60 * 60 * 1000,
+		cookies.set('user_token', token, {
+			maxAge: 168 * 60 * 60 * 1000, // one week
 			httpOnly: true
 		});
-
-		console.log('ready to call redirect');
-		return { success: true, user: user.email, accessToken, accessTokenExpiresAt };
+		return { success: true, user: user.email };
+	},
+	logout: async ({ cookies }) => {
+		cookies.delete('user_token');
 	}
 };
