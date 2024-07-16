@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '\$app/navigation';
 	import { applyAction, enhance } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 
 	export let form;
 </script>

@@ -8,7 +8,7 @@ export const load: PageLoad = async ({ parent }) => {
 
 	const getPreview = (post: Post) => {
 		const doc = parse(stringify(post.post));
-		return doc.getElementsByTagName('p')[0].rawText?.slice(0, 80) ?? '...';
+		return doc.getElementsByTagName('p')[0]?.rawText?.slice(0, 80) ?? '...';
 	};
 
 	const addPreview = (post: Post): Post => ({ preview: getPreview(post), ...post });

@@ -7,15 +7,30 @@ import { fail } from '@sveltejs/kit';
 export const verifyPassword = (passwordAttempt: string, hashedPassword: string): Promise<boolean> =>
 	bcrypt.compare(passwordAttempt, hashedPassword);
 
-export const verifyToken = (token: string): boolean => {
-	try {
-		const decodedToken = token ? jwtDecode(token) : null;
-		jwt.verify(token, JWT_SECRET ?? '');
-	} catch (error: any) {
-		console.log('쿠기가 다음 사유로 verify 되지 않았습니다 -', error.message);
-		return false;
-	}
-	return true;
+export interface UserDecoded {
+	sub: number;
+	email: string;
+	iat: number;
+	exp: number;
+}
+
+export const verifyToken = (token: string): Promise<null | UserDecoded> => {
+	return new Promise((resolve) => {
+		try {
+			const decodedToken = token ? jwtDecode(token) : null;
+			jwt.verify(token, JWT_SECRET ?? '', (error, user) => {
+				if (error) {
+					console.log('쿠기가 다음 사유로 verify 되지 않았습니다 -', error.message);
+					resolve(null);
+				} else {
+					resolve(user as unknown as UserDecoded);
+				}
+			});
+		} catch (error: any) {
+			console.log('쿠기가 다음 사유로 verify 되지 않았습니다 -', error.message);
+			resolve(null);
+		}
+	});
 };
 
 export const createToken = (user: User) => {

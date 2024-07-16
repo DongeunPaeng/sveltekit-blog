@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+
 	export let data: PageData;
+	// TODO: why does the last deleted post not included here?
 </script>
 
 <svelte:head>

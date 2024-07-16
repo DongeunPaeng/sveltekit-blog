@@ -2,6 +2,10 @@
 	import type { PageData } from './$types';
 	import 'katex/dist/katex.min.css';
 	import { DateTime, Interval } from 'luxon';
+	import type { ActionResult } from '@sveltejs/kit';
+	import { applyAction, deserialize } from '$app/forms';
+	import { invalidateAll } from '$app/navigation';
+	import { goto } from '\$app/navigation';
 
 	export let data: PageData;
 
@@ -11,6 +15,29 @@
 		const interval = Interval.fromDateTimes(birthDate, writtenDate);
 		const age: number = Math.floor(interval.length('years'));
 		return writtenDate.toFormat('LLL dd, yyyy') + ` · 만 ${age}세`;
+	};
+
+	const deletePost = async (event: { currentTarget: EventTarget & HTMLFormElement }) => {
+		const isConfirmed = window.confirm('Are you sure to delete this post?');
+		if (!isConfirmed) return;
+		const formData = new FormData(event.currentTarget);
+		formData.append('postId', data.post.id as unknown as string);
+		formData.append('authorId', data.post.author as unknown as string);
+		formData.append('loggedInUserId', '' + data?.loggedInUser?.sub);
+		const response = await fetch(event.currentTarget.action + '?/delete', {
+			method: 'POST',
+			body: formData
+		});
+		const result: ActionResult = deserialize(await response.text());
+		if (result.type === 'success') {
+			// TODO: why does the deleted post pertain in the client side?
+			data.posts = data.posts.filter((p) => p.id !== data.post.id);
+			await invalidateAll();
+			goto('/', { invalidateAll: true });
+		} else {
+			alert('삭제 실패: ' + result.data.message);
+		}
+		applyAction(result);
 	};
 </script>
 
@@ -31,15 +58,41 @@
 				</div>
 			</div>
 			<div class="flex flex-col items-end ml-4 mb-2 text-sm text-gray-400">
-				<!--TODO: finish this edit and delete function-->
-				<a class="text-gray-400" href={`/edit/${data.post.id}`}>
+				<a class="text-gray-400" href="/edit">
 					EDIT
 				</a>
-				<button on:click={()=>{}}>DELETE</button>
+				<form method="POST" on:submit|preventDefault={deletePost}>
+					<button class="text-gray-400">
+						DELETE
+					</button>
+				</form>
 			</div>
 		</div>
 		<div class="renderedHTML mb-4 text-base text-gray-600">
 			{@html data.post.post}
+		</div>
+		<!--TODO: finish here-->
+		<div id="recommended_post" class="mt-10 px-4">
+			<p class="text-gray-400 text-sm py-1 border-gray-200 border-0 border-t">
+				NEXT POST
+			</p>
+			<div class="w-full my-4">
+				<a href='/' class="text-gray-800">
+					<h1>TITLE</h1>
+				</a>
+				<div class="mb-2 text-sm text-gray-400">
+					DATE
+				</div>
+				<p class="text-sm text-gray-600">
+					PARA
+					<a
+						href='/'
+						class="ml-2 text-sm text-gray-400 hover:text-gray-800 underline"
+					>
+						더 보기
+					</a>
+				</p>
+			</div>
 		</div>
 	</div>
 </div>

@@ -13,12 +13,12 @@
 	<div id="top_nav" class="w-full">
 		<a class="font-extrabold" href="/">Dongeun Paeng</a>
 		<div id="menu" class="mt-4 items-center sm:flex sm:justify-between">
-			{#if data.loggedIn}
+			{#if data.loggedInUser}
 				<a class="text-gray-400 py-2 menu" href="/draft">Draft</a>
 			{:else}
 				<div />
 			{/if}
-			{#if data.loggedIn}
+			{#if data.loggedInUser}
 				<form class="menu" method="POST" action="/auth?/logout">
 					<div class="py-2">
 						<a class="mr-4 menu" href="/write">Write</a>

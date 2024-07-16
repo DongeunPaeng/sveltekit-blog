@@ -5,8 +5,10 @@ import { jwtDecode } from 'jwt-decode';
 import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes/draft/$types';
 
 export const load: PageServerLoad = async ({ cookies }) => {
+	console.log('로그인 화면에 진입했습니다.');
 	const user_token = cookies.get('user_token') || '';
-	if (verifyToken(user_token)) throw redirect(307, '/');
+	const verifiedUser = await verifyToken(user_token);
+	if (!!verifiedUser) throw redirect(307, '/');
 };
 
 /** @type {import('./$types').Actions} */
