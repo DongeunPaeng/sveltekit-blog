@@ -1,7 +1,9 @@
 import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
-import { fail, redirect } from '@sveltejs/kit';
-import { type UserDecoded, verifyToken } from '$lib/server/common';
+import { fail } from '@sveltejs/kit';
+
+// 아래 코드 없으면 새로고침 시 에러 난다. +page.svelte에 form이 있는데, 그것 때문인 듯.
+export const prerender = false;
 
 export const load: PageServerLoad = async ({ params, parent }) => {
 	const { posts, loggedInUser } = await parent();
@@ -23,7 +25,7 @@ export const actions = {
 		const status = data.get('status') as unknown as number;
 		const postId = data.get('postId') as unknown as number;
 		const authorId = data.get('authorId') as unknown as number;
-		console.log('어떤 정보를 받았나요?', data);
+		console.log('Edit API가 어떤 정보를 받았나요?', data);
 
 		// TODO: verification needed
 		try {

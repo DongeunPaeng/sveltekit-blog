@@ -33,9 +33,20 @@ For inquiries or feedback, please use the repository's issues section.
 
 ## TODO
 
+- [ ] Finish Write, Edit and Draft page.
+    - [X] Show Code Block properly in editor.
+    - [X] Show language selector properly in editor.
+    - [X] Show previous code block properly in post.
+    - [ ] Check if the new codes are saved with language.
+        - 일단 한 번 저장해보자. DB에 어떻게 쌓이는지.
+    - [X] Finish KaTex.
+    - [ ] Finish 'write' request.
+    - [ ] Return 404 when accessing deleted posts.
+- [ ] Get the next and previous posts.
 - [ ] After delete, the deleted post should be gone.
+    - It's because layout.server.ts doesn't run after update.
 - [ ] Search function needs to be finished.
 - [ ] Verify the token properly (client - before edit, server - before edit).
-- [ ] Get the next and previous posts.
-- [ ] Finish Write, Edit and Draft page.
 - [ ] Finish Footer.
+- [ ] Make new categories.
+- [ ] Other TODOs remaining.

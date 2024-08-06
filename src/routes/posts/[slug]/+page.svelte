@@ -4,8 +4,14 @@
 	import { DateTime, Interval } from 'luxon';
 	import type { ActionResult } from '@sveltejs/kit';
 	import { applyAction, deserialize } from '$app/forms';
-	import { invalidateAll } from '$app/navigation';
 	import { goto } from '\$app/navigation';
+	// import { invalidateAll } from '$app/navigation';
+	import hljs from 'highlight.js';
+	import { onMount } from 'svelte';
+
+	onMount(() => {
+		hljs.highlightAll();
+	});
 
 	export let data: PageData;
 
@@ -30,10 +36,9 @@
 		});
 		const result: ActionResult = deserialize(await response.text());
 		if (result.type === 'success') {
-			// TODO: why does the deleted post pertain in the client side?
 			data.posts = data.posts.filter((p) => p.id !== data.post.id);
-			await invalidateAll();
-			goto('/', { invalidateAll: true });
+			// await invalidateAll();
+			goto('/');
 		} else {
 			alert('삭제 실패: ' + result.data.message);
 		}
@@ -71,6 +76,7 @@
 		<div class="renderedHTML mb-4 text-base text-gray-600">
 			{@html data.post.post}
 		</div>
+
 		<!--TODO: finish here-->
 		<div id="recommended_post" class="mt-10 px-4">
 			<p class="text-gray-400 text-sm py-1 border-gray-200 border-0 border-t">
@@ -98,4 +104,5 @@
 </div>
 
 <style>
+    @import "highlight.js/styles/atom-one-light.min.css";
 </style>

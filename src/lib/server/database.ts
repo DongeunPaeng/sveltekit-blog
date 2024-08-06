@@ -36,6 +36,13 @@ export const getUser = async (email: string) => {
 	return rows;
 };
 
+export const writePost = async (title: string, post: string, type: number, status: number, authorId: number) => {
+	const [rows] = await query(`insert into posts (author, post, title, type, status, created_at) values (?, ?, ?, ?, ?, now())`, ['' + authorId, post, title, '' + type, '' + status]) as ResultSetHeader[];
+	console.log(rows);
+	// if (rows.affectedRows !== 1) throw new Error('영향 받은 데이터가 없습니다.');
+	return;
+};
+
 export const editPost = async (title: string, post: string, type: number, status: number, postId: number) => {
 	// TODO: change 99999 to ? later.
 	const [rows] = await query(`update posts set title = ?, post = ?, type = ?, status = ? where id = 99999`, [title, post, '' + type, '' + status, '' + postId]) as ResultSetHeader[];
@@ -44,7 +51,7 @@ export const editPost = async (title: string, post: string, type: number, status
 };
 
 export const deletePost = async (author: number, postId: number) => {
-	const [rows] = await query(`update posts set status = 1 where id = ? and author = ?`, ['' + author, '' + postId]) as ResultSetHeader[];
+	const [rows] = await query(`update posts set status = 1 where id = ? and author = ?`, ['' + postId, '' + author]) as ResultSetHeader[];
 	if (rows.affectedRows !== 1) throw new Error('영향 받은 데이터가 없습니다.');
 	return;
 };

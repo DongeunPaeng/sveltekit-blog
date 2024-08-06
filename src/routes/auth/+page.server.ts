@@ -4,11 +4,12 @@ import { createToken, verifyPassword, verifyToken } from '$lib/server/common';
 import { jwtDecode } from 'jwt-decode';
 import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes/draft/$types';
 
-export const load: PageServerLoad = async ({ cookies }) => {
+export const prerender = false;
+
+export const load: PageServerLoad = async ({ parent }) => {
+	const { loggedInUser } = await parent();
+	if (loggedInUser) throw redirect(307, '/');
 	console.log('로그인 화면에 진입했습니다.');
-	const user_token = cookies.get('user_token') || '';
-	const verifiedUser = await verifyToken(user_token);
-	if (!!verifiedUser) throw redirect(307, '/');
 };
 
 /** @type {import('./$types').Actions} */
