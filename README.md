@@ -45,6 +45,7 @@ For inquiries or feedback, please use the repository's issues section.
 - [ ] Get the next and previous posts.
 - [ ] After delete, the deleted post should be gone.
     - It's because layout.server.ts doesn't run after update.
+    - Let's use the life cycle hooks.
 - [ ] Search function needs to be finished.
 - [ ] Verify the token properly (client - before edit, server - before edit).
 - [ ] Finish Footer.
