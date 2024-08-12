@@ -13,7 +13,8 @@ This repository houses a personal blog project.
 
 ## Tech Stack
 
-Initially developed with **ReactJS** (frontend) and **NodeJS** (backend). Transitioning to **SvelteKit** is in progress.
+Initially developed with **ReactJS** (frontend) and **Node.js** (backend). Transitioning to **SvelteKit** is in
+progress.
 
 ## Transition to SvelteKit
 
@@ -33,21 +34,25 @@ For inquiries or feedback, please use the repository's issues section.
 
 ## TODO
 
-- [ ] Finish Write, Edit and Draft page.
+- [ ] Finish Write page.
     - [X] Show Code Block properly in editor.
     - [X] Show language selector properly in editor.
     - [X] Show previous code block properly in post.
-    - [ ] Check if the new codes are saved with language.
-        - 일단 한 번 저장해보자. DB에 어떻게 쌓이는지.
+    - [X] Check if the new codes are saved with language.
+        - [X] Save with language specified
     - [X] Finish KaTex.
-    - [ ] Finish 'write' request.
-    - [ ] Return 404 when accessing deleted posts.
+    - [X] Finish 'write' request.
+    - [X] Redirect after 'write'.
+    - [ ] Delete the input box before saving.
+- [ ] Return 404 when accessing deleted posts.
+- [ ] Finish Edit and Draft page.
 - [ ] Get the next and previous posts.
-- [ ] After delete, the deleted post should be gone.
-    - It's because layout.server.ts doesn't run after update.
+- [ ] After CRUD operations, the posts should be updated.
+    - It's because layout.server.ts does not run after update.
     - Let's use the life cycle hooks.
 - [ ] Search function needs to be finished.
 - [ ] Verify the token properly (client - before edit, server - before edit).
 - [ ] Finish Footer.
 - [ ] Make new categories.
 - [ ] Other TODOs remaining.
+- [ ] Token 만료되면 loggedInUser 없애고 Delete 버튼도 없어야 함.

@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import katex from 'katex';
 	import hljs from 'highlight.js';
-	import { invalidateAll } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 
 	let editor: HTMLElement;
 
@@ -48,20 +48,36 @@
 
 		removeElementsByClass('ql-ui');
 
-		const contentDiv = document.getElementById('content')?.children[0];
+		// Set editable to false
+		const editableContent = document.getElementsByClassName('ql-editor');
+		for (let editableContentElement of editableContent) {
+			editableContentElement.setAttribute('contenteditable', 'false');
+		}
 
-		data.append('content', contentDiv?.outerHTML || '');
+		// Make code block detectable for highlight.js
+		const codeBlock = document.getElementsByClassName('ql-code-block-container');
+
+		for (let codeBlockElement of codeBlock) {
+			console.log(codeBlockElement);
+			const language = codeBlockElement.getElementsByClassName('ql-code-block')[0].getAttribute('data-language');
+			const code = codeBlockElement.innerText;
+			codeBlockElement.outerHTML = `<div><pre><code class="language-${language}">${code}</code></pre></div>`;
+		}
+
+		data.append('content', editor.innerHTML || '');
 
 		const response = await fetch(e.currentTarget?.action, {
 			method: 'POST',
 			body: data
 		});
 
-		// TODO: check if I need the below codes.
 		const result = deserialize(await response.text());
 		if (result.type === 'success') {
+			// TODO: what is invalidateAll?
 			await invalidateAll();
+			await goto('/');
 		}
+		// TODO: check if I need the below codes.
 		applyAction(result);
 	};
 </script>
