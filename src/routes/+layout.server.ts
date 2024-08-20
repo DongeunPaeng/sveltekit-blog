@@ -4,7 +4,7 @@ import { verifyToken } from '$lib/server/common';
 
 export const prerender = true;
 
-const posts = (await db.getPosts()) as Post[];
+let posts = (await db.getPosts()) as Post[];
 
 export const load: LayoutServerLoad = async ({ cookies }) => {
 	const verifiedUser = await verifyToken(cookies.get('user_token') || '');

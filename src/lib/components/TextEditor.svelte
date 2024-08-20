@@ -47,6 +47,7 @@
 		const data = new FormData(e.currentTarget as HTMLFormElement);
 
 		removeElementsByClass('ql-ui');
+		removeElementsByClass('ql-tooltip');
 
 		// Set editable to false
 		const editableContent = document.getElementsByClassName('ql-editor');
@@ -56,9 +57,7 @@
 
 		// Make code block detectable for highlight.js
 		const codeBlock = document.getElementsByClassName('ql-code-block-container');
-
 		for (let codeBlockElement of codeBlock) {
-			console.log(codeBlockElement);
 			const language = codeBlockElement.getElementsByClassName('ql-code-block')[0].getAttribute('data-language');
 			const code = codeBlockElement.innerText;
 			codeBlockElement.outerHTML = `<div><pre><code class="language-${language}">${code}</code></pre></div>`;

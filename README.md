@@ -34,7 +34,7 @@ For inquiries or feedback, please use the repository's issues section.
 
 ## TODO
 
-- [ ] Finish Write page.
+- [X] Finish Write page.
     - [X] Show Code Block properly in editor.
     - [X] Show language selector properly in editor.
     - [X] Show previous code block properly in post.
@@ -43,13 +43,13 @@ For inquiries or feedback, please use the repository's issues section.
     - [X] Finish KaTex.
     - [X] Finish 'write' request.
     - [X] Redirect after 'write'.
-    - [ ] Delete the input box before saving.
+    - [X] Delete the input box before saving.
 - [ ] Return 404 when accessing deleted posts.
 - [ ] Finish Edit and Draft page.
 - [ ] Get the next and previous posts.
 - [ ] After CRUD operations, the posts should be updated.
     - It's because layout.server.ts does not run after update.
-    - Let's use the life cycle hooks.
+    - Let's use the life cycle.(Read a book or the official docs or see the Udemy lecture.)
 - [ ] Search function needs to be finished.
 - [ ] Verify the token properly (client - before edit, server - before edit).
 - [ ] Finish Footer.
