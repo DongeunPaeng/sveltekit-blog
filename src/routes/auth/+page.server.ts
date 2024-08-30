@@ -1,6 +1,6 @@
 import { fail, redirect } from '@sveltejs/kit';
 import * as db from '$lib/server/database';
-import { createToken, verifyPassword, verifyToken } from '$lib/server/common';
+import { createToken, verifyPassword, verifyToken } from '$lib/server/auth';
 import { jwtDecode } from 'jwt-decode';
 import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes/draft/$types';
 

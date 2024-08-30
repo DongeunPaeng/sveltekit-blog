@@ -2,10 +2,8 @@ import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
 import { fail } from '@sveltejs/kit';
 
-// 아래 코드 없으면 새로고침 시 에러 난다. +page.svelte에 form이 있는데, 그것 때문인 듯.
-export const prerender = false;
-
 export const load: PageServerLoad = async ({ params, parent }) => {
+	console.log('page.server.js - load');
 	const { posts, loggedInUser } = await parent();
 	const [post] = posts.filter((p: Post) => p.id === parseInt(params.slug));
 	return {
@@ -18,6 +16,7 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 /** @type {import('./$types').Actions} */
 export const actions = {
 	edit: async ({ request }) => {
+		console.log('page.server.js - edit');
 		const data = await request.formData();
 		const title = data.get('title') as string;
 		const post = data.get('post') as string;
@@ -25,9 +24,13 @@ export const actions = {
 		const status = data.get('status') as unknown as number;
 		const postId = data.get('postId') as unknown as number;
 		const authorId = data.get('authorId') as unknown as number;
-		console.log('Edit API가 어떤 정보를 받았나요?', data);
+		const loggedInUserId = Number(data.get('loggedInUserId'));
 
-		// TODO: verification needed
+		if (loggedInUserId !== authorId) return fail(500, {
+			incorrect: true,
+			message: 'Token이 유효하지 않습니다.'
+		});
+
 		try {
 			await db.editPost(title, post, type, status, postId);
 			return { success: true };
@@ -37,6 +40,7 @@ export const actions = {
 		}
 	},
 	delete: async ({ request, cookies }) => {
+		console.log('page.server.js - delete');
 		const data = await request.formData();
 		const postId = Number(data.get('postId'));
 		const authorId = Number(data.get('authorId'));

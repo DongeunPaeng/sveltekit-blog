@@ -1,8 +1,8 @@
 import type { LayoutServerLoad } from './$types';
 import * as db from '$lib/server/database';
-import { verifyToken } from '$lib/server/common';
+import { verifyToken } from '$lib/server/auth';
 
-export const prerender = true;
+// export const prerender = true;
 
 let posts = (await db.getPosts()) as Post[];
 

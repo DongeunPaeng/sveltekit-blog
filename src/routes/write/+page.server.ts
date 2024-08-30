@@ -1,7 +1,7 @@
 import type { PageServerLoad } from './$types';
 import { fail, redirect } from '@sveltejs/kit';
 import * as db from '$lib/server/database';
-import { verifyToken } from '$lib/server/common';
+import { verifyToken } from '$lib/server/auth';
 
 export const prerender = false;
 
@@ -26,12 +26,8 @@ export const actions = {
 		const status = data.get('status') as unknown as number;
 		const authorId = verifiedUser.sub;
 
-		console.log('Writing with:', title, post, type, status, authorId);
-
-		// FIXME: Test
-		db.writePost(title, post, type, status, authorId);
-
 		// Save the data in the database
+		await db.writePost(title, post, type, status, authorId);
 
 		// Set the tokens in a cookie
 		return { success: true };

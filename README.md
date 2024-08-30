@@ -44,15 +44,21 @@ For inquiries or feedback, please use the repository's issues section.
     - [X] Finish 'write' request.
     - [X] Redirect after 'write'.
     - [X] Delete the input box before saving.
-- [ ] Return 404 when accessing deleted posts.
-- [ ] Finish Edit and Draft page.
-- [ ] Get the next and previous posts.
 - [ ] After CRUD operations, the posts should be updated.
-    - It's because layout.server.ts does not run after update.
-    - Let's use the life cycle.(Read a book or the official docs or see the Udemy lecture.)
+    - [ ] FIXME FROM HERE부터 하나씩 차근차근 테스트해보자. 어디서부터 rehydration이 안 되는지.
+        - [X] CREATE
+        - [X] READ
+        - [ ] UPDATE
+        - [X] DELETE
+    - [ ] (superior) 프론트엔드 코드에서 layout.server.ts만 한 번 더 호출할 수 있으면 된다.
+    - [ ] (inferior) store를 두고, 변경이 발생하면 store를 고쳐주면 된다.
+- [ ] Finish Edit and Draft page.
+- [ ] Return 404 when accessing deleted posts.
+- [ ] Get the next and previous posts.
 - [ ] Search function needs to be finished.
 - [ ] Verify the token properly (client - before edit, server - before edit).
 - [ ] Finish Footer.
 - [ ] Make new categories.
 - [ ] Other TODOs remaining.
 - [ ] Token 만료되면 loggedInUser 없애고 Delete 버튼도 없어야 함.
+- [ ] Write and Logout button are hovered together.

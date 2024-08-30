@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { JWT_SECRET } from '$env/static/private';
 import { jwtDecode } from 'jwt-decode';
-import { fail } from '@sveltejs/kit';
 
 export const verifyPassword = (passwordAttempt: string, hashedPassword: string): Promise<boolean> =>
 	bcrypt.compare(passwordAttempt, hashedPassword);

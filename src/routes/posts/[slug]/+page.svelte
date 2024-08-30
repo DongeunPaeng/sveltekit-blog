@@ -5,7 +5,6 @@
 	import type { ActionResult } from '@sveltejs/kit';
 	import { applyAction, deserialize } from '$app/forms';
 	import { goto } from '\$app/navigation';
-	// import { invalidateAll } from '$app/navigation';
 	import hljs from 'highlight.js';
 	import { onMount } from 'svelte';
 
