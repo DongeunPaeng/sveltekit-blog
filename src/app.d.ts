@@ -9,10 +9,12 @@ declare global {
 		type: number;
 		preview?: string;
 	}
+
 	enum Deleted {
 		NO,
 		YES
 	}
+
 	interface User {
 		id: numnber;
 		email: string;
@@ -23,10 +25,10 @@ declare global {
 		length: number;
 		deleted: Deleted;
 	}
+
 	namespace App {
 		interface PageData {
 			pageTitle: string;
-			posts: Post[];
 		}
 	}
 }

@@ -1,16 +1,8 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { DateTime, Interval } from 'luxon';
+	import { addAge } from '$lib/common';
 
 	export let data: PageData;
-
-	const addAge = (createdAt: Date): string => {
-		const birthDate: DateTime = DateTime.local(1989, 12, 23, 0, 0, 0);
-		const writtenDate: DateTime = DateTime.fromJSDate(createdAt);
-		const interval = Interval.fromDateTimes(birthDate, writtenDate);
-		const age: number = Math.floor(interval.length('years'));
-		return writtenDate.toFormat('LLL dd, yyyy') + ` · 만 ${age}세`;
-	};
 </script>
 
 <svelte:head>

@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { addAge } from '$lib/common';
 
 	export let data: PageData;
-	// TODO: why does the last deleted post not included here?
 </script>
 
 <svelte:head>
@@ -10,7 +10,26 @@
 </svelte:head>
 
 <div>
+	<!-- TODO: search feature unfinished -->
+	<input
+		class="mt-4 mb-4 md:w-1/2 w-full p-2 border border-gray-300 rounded-md"
+		type="text"
+		placeholder="Search"
+		name=""
+		id=""
+	/>
 	{#each data.posts as post}
-		<div>{post.title}</div>
+		<div id="post_card" class="my-4">
+			<div id="post_title">
+				<a href={`/draft/${post.id}`}>{post.title}</a>
+			</div>
+			<div id="post_date" class="text-gray-400 text-sm mb-2">
+				{addAge(post.created_at)}
+			</div>
+			<div id="post_preview" class="text-sm text-gray-600">
+				{post.preview}
+				<a href={`/posts/${post.id}`} class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">더 보기</a>
+			</div>
+		</div>
 	{/each}
 </div>

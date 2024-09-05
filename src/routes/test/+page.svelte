@@ -3,7 +3,7 @@
 
 	export let data: PageData;
 
-	let value = '내용을 입력하세요.';
+	let value = '';
 </script>
 
 <svelte:head>
@@ -22,7 +22,8 @@
 		</div>
 	{/each}
 	<form method="post" action="?/create" class="flex flex-col">
-		<textarea class="border-2 p-2" name="content" id="content" cols="30" rows="10" bind:value={value}></textarea>
+		<textarea placeholder="내용 입력하세요." class="border-2 p-2" name="content" id="content" cols="30" rows="10"
+							bind:value={value}></textarea>
 		<button class="bg-amber-300 p-2 mt-2" type="submit">Save</button>
 	</form>
 </div>

@@ -1,11 +1,16 @@
 <script lang="ts">
 	import { applyAction, deserialize } from '$app/forms';
-
-	export let title = '';
 	import { onMount } from 'svelte';
 	import katex from 'katex';
 	import hljs from 'highlight.js';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
+	import { setAttributeForAll } from '$lib/common';
+
+	export let draft: Post | null;
+	export let title = draft?.title;
+	export let content = draft?.post;
+	export let id = draft?.id;
+	export let newPost = true;
 
 	let editor: HTMLElement;
 
@@ -27,13 +32,14 @@
 		window.katex = katex;
 		const { default: Quill } = await import('quill');
 
-		new Quill(editor, {
+		const quill = new Quill(editor, {
 			modules: {
 				syntax: { hljs },
 				toolbar: toolbarOptions
 			},
 			theme: 'snow'
 		});
+		quill.root.innerHTML = content || '';
 	});
 
 	const removeElementsByClass = (className: string) => {
@@ -43,48 +49,48 @@
 		}
 	};
 
+	const replaceCodeBlock = (block: Element) => {
+		const language = block.querySelector('.ql-code-block')?.getAttribute('data-language');
+		block.outerHTML = `<div><pre><code class="language-${language}">${block.innerText}</code></pre></div>`;
+	};
+
+	const checkListType = (block: Element) => {
+		if (!!block.querySelector('[data-list="bullet"]')) {
+			const ul = document.createElement('ul');
+			ul.innerHTML = block.innerHTML;
+			block.insertAdjacentElement('afterend', ul);
+			block.remove();
+		}
+	};
+
+	const addClass = (block: Element, classNames: string[]) => block.classList.add(...classNames);
+
 	const onSubmit = async (e: SubmitEvent) => {
 		const data = new FormData(e.currentTarget as HTMLFormElement);
 
-		removeElementsByClass('ql-ui');
-		removeElementsByClass('ql-tooltip');
+		['ql-ui', 'ql-tooltip'].forEach(removeElementsByClass);
+		setAttributeForAll(document.getElementsByClassName('ql-editor'), 'contenteditable', 'false');
+		document.querySelectorAll('ol').forEach(checkListType);
+		document.querySelectorAll('ol').forEach(el => addClass(el, ['list-decimal', 'list-inside']));
+		document.querySelectorAll('ul').forEach(el => addClass(el, ['list-disc', 'list-inside']));
+		document.querySelectorAll('.ql-code-block-container').forEach(replaceCodeBlock);
 
-		// Set editable to false
-		const editableContent = document.getElementsByClassName('ql-editor');
-		for (let editableContentElement of editableContent) {
-			editableContentElement.setAttribute('contenteditable', 'false');
-		}
-
-		// Make code block detectable for highlight.js
-		const codeBlock = document.getElementsByClassName('ql-code-block-container');
-		for (let codeBlockElement of codeBlock) {
-			const language = codeBlockElement.getElementsByClassName('ql-code-block')[0].getAttribute('data-language');
-			const code = codeBlockElement.innerText;
-			codeBlockElement.outerHTML = `<div><pre><code class="language-${language}">${code}</code></pre></div>`;
-		}
-
-		data.append('content', editor.innerHTML || '');
+		data.append('content', document.querySelector('.ql-editor')?.innerHTML || '');
 
 		const response = await fetch(e.currentTarget?.action, {
 			method: 'POST',
 			body: data
 		});
-
 		const result = deserialize(await response.text());
-		if (result.type === 'success') {
-			// TODO: what is invalidateAll?
-			await invalidateAll();
-			await goto('/');
-		}
-		// TODO: check if I need the below codes.
-		applyAction(result);
+		result.type === 'redirect' ? goto(result.location) : await applyAction(result);
 	};
 </script>
 
 <div class="flex items-start justify-center py-12">
 	<div class="w-full">
-		<form method="post" action="/write?/write" on:submit|preventDefault={onSubmit}>
+		<form action={newPost ? "write?/write" : "/write?/edit"} on:submit|preventDefault={onSubmit}>
 			<div class="text-sm text-gray-500 mb-1">Title</div>
+			<input type="number" id="postId" name="postId" class="hidden" value={newPost ? null : id}>
 			<input
 				id="title"
 				required
@@ -127,11 +133,10 @@
 	</div>
 </div>
 
-
 <style>
     @import 'katex/dist/katex.min.css';
     @import 'quill/dist/quill.snow.css';
-    @import 'textEditor.css';
+    @import 'TextEditor.css';
     @import 'highlight.js/styles/atom-one-dark.min.css';
 
     :global(.ql-ui) {

@@ -15,14 +15,10 @@
 		<div id="menu" class="mt-4 items-center sm:flex sm:justify-between">
 			{#if data.loggedInUser}
 				<a class="text-gray-400 py-2 menu" href="/draft">Draft</a>
-			{:else}
-				<div />
-			{/if}
-			{#if data.loggedInUser}
-				<form class="menu" method="POST" action="/auth?/logout">
+				<form method="POST" action="/auth?/logout">
 					<div class="py-2">
 						<a class="mr-4 menu" href="/write">Write</a>
-						<button>Logout</button>
+						<button class="menu">Logout</button>
 					</div>
 				</form>
 			{/if}
