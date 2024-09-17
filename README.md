@@ -54,12 +54,12 @@ For inquiries or feedback, please use the repository's issues section.
 - [X] List is not properly shown in the post.
     - [X] Recognise unordered list properly (QuillJS defect)
     - [X] Add tailwind list style to all old posts, too.
-- [ ] In TextEditor, I can't see ul with tailwind class. Fix this.
-    - [ ] Indentation... 이 문제는 나중에 해결하자. Tailwind 자체 결함.
-- [ ] In TextEditor, I can't see codes. Fix this.
-- [ ] Separate public and private.
-- [ ] In TextEditor, disable the default rgb color assignment.
+- [X] In TextEditor, I can't see <ul> with tailwind class. Fix this.
+- [X] In TextEditor, I can't see codes. Fix this.
+- [X] Separate public and private.
+- [X] Make the post non-nullable.
 - [X] Get the next and previous posts.
+- [ ] In the post, some images are not shown (429 error).
 - [ ] Search function needs to be finished.
 - [ ] Verify the token properly. (check if login/logout affects parent properly.)
 - [ ] Finish Footer.
@@ -68,9 +68,12 @@ For inquiries or feedback, please use the repository's issues section.
 - [ ] Token 만료되면 loggedInUser 없애고 Delete 버튼도 없어야 함.
 - [X] Write and Logout button are hovered together.
 - [ ] Change /test to principles or another page.
+- [ ] Indentation... 이 문제는 나중에 해결하자. Tailwind 자체 결함.
+    - [ ] Second-level indentation
 - [ ] 전반적인 리팩터링 (중복 코드 없애고, 깔끔하게 만들기)
     - [X] CRUD 과정 복기하기
     - [ ] Auth 과정 복기하기
+    - [ ] TextEditor 로직 특히 복잡함
 - [ ] Add loading spinner
 - [ ] QC
 - [ ] CI/CD and deployment

@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import katex from 'katex';
 	import hljs from 'highlight.js';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { setAttributeForAll } from '$lib/common';
 
 	export let draft: Post | null;
@@ -13,6 +13,7 @@
 	export let newPost = true;
 
 	let editor: HTMLElement;
+	let errorMessage: string;
 
 	export let toolbarOptions = [
 		[{ header: [1, 2, false] }],
@@ -39,7 +40,11 @@
 			},
 			theme: 'snow'
 		});
-		quill.root.innerHTML = content || '';
+		quill.root.innerHTML = content
+			?.replaceAll(`<ul`, `<ol`)
+			.replaceAll(`ul>`, `ol>`)
+			.replaceAll(`<pre`, `<div`)
+			.replaceAll(`pre>`, `div>`) || '';
 	});
 
 	const removeElementsByClass = (className: string) => {
@@ -51,10 +56,10 @@
 
 	const replaceCodeBlock = (block: Element) => {
 		const language = block.querySelector('.ql-code-block')?.getAttribute('data-language');
-		block.outerHTML = `<div><pre><code class="language-${language}">${block.innerText}</code></pre></div>`;
+		block.outerHTML = `<div class="ql-code-block-container"><pre class="ql-code-block"><code class="language-${language}">${block.innerText}</code></pre></div>`;
 	};
 
-	const checkListType = (block: Element) => {
+	const convertOlToUl = (block: Element) => {
 		if (!!block.querySelector('[data-list="bullet"]')) {
 			const ul = document.createElement('ul');
 			ul.innerHTML = block.innerHTML;
@@ -70,7 +75,7 @@
 
 		['ql-ui', 'ql-tooltip'].forEach(removeElementsByClass);
 		setAttributeForAll(document.getElementsByClassName('ql-editor'), 'contenteditable', 'false');
-		document.querySelectorAll('ol').forEach(checkListType);
+		document.querySelectorAll('ol').forEach(convertOlToUl);
 		document.querySelectorAll('ol').forEach(el => addClass(el, ['list-decimal', 'list-inside']));
 		document.querySelectorAll('ul').forEach(el => addClass(el, ['list-disc', 'list-inside']));
 		document.querySelectorAll('.ql-code-block-container').forEach(replaceCodeBlock);
@@ -82,7 +87,14 @@
 			body: data
 		});
 		const result = deserialize(await response.text());
-		result.type === 'redirect' ? goto(result.location) : await applyAction(result);
+
+		if (result.type === 'redirect') goto(result.location);
+		if (result.type === 'failure') {
+			setAttributeForAll(document.getElementsByClassName('ql-editor'), 'contenteditable', 'true');
+			errorMessage = result?.data?.message as string;
+			alert(errorMessage);
+		}
+		applyAction(result);
 	};
 </script>
 
@@ -93,16 +105,14 @@
 			<input type="number" id="postId" name="postId" class="hidden" value={newPost ? null : id}>
 			<input
 				id="title"
-				required
-				class="mb-4 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 sm:text-sm"
+				class="focus:outline-none caret-black mb-4 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900"
 				type="text"
 				name="title"
 				bind:value="{title}"
 			/>
 			<div class="text-sm text-gray-500 mb-1">Post</div>
-
 			<div class="h-screen mb-28 sm:mb-14">
-				<div id="content" bind:this={editor} />
+				<div id="content" class="caret-black" bind:this={editor} />
 			</div>
 
 			<div class="flex justify-end items-center">
@@ -111,16 +121,17 @@
 					name="type"
 					id="type"
 				>
-					<option value="blogposts">Blog Posts</option>
-					<option value="study">Study</option>
+					<option value="GENERAL">General</option>
+					<option value="STUDY">Study</option>
+					<option value="BOOK_REVIEW">Book Review</option>
 				</select>
 				<select
 					class="py-2 mr-4 text-sm text-gray-900"
 					name="status"
 					id="status"
 				>
-					<option value="public">Public</option>
-					<option value="private">Private</option>
+					<option value="PUBLIC">Public</option>
+					<option value="PRIVATE">Private</option>
 				</select>
 				<button
 					class="bg-gray-200 text-sm text-gray-900 py-2 px-3 rounded-md"
@@ -129,6 +140,10 @@
 					Submit
 				</button>
 			</div>
+			{#if errorMessage !== undefined}
+				<div class="mt-2 flex justify-end">
+					<span class="text-red-500">{errorMessage}</span></div>
+			{/if}
 		</form>
 	</div>
 </div>

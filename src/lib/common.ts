@@ -18,3 +18,8 @@ export const addPreview = (post: Post): Post => ({ preview: getPreview(post), ..
 
 export const setAttributeForAll = (elements: HTMLCollectionOf<Element>, attribute: string, value: string) =>
 	Array.from(elements).forEach(el => el.setAttribute(attribute, value));
+
+export const checkEmptyPost = (content: string) => content
+	.replaceAll(' ', '')
+	.replaceAll('<p></p>', '')
+	.replaceAll('<p><br></p>', '') === '';
