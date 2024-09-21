@@ -1,5 +1,5 @@
 import type { PageServerLoad } from './$types';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import * as db from '$lib/server/database';
 import { verifyToken } from '$lib/server/auth';
 import { checkEmptyPost } from '$lib/common';
@@ -7,11 +7,11 @@ import { checkEmptyPost } from '$lib/common';
 // export const prerender = false;
 
 export const load: PageServerLoad = async ({ parent }) => {
-	const { loggedInUser } = await parent();
+	const { pageTitle, loggedInUser } = await parent();
 	if (!loggedInUser) throw redirect(307, '/');
 
 	return {
-		pageTitle: 'Dongeun Paeng | Write'
+		pageTitle: `${pageTitle} | Write`
 	};
 };
 

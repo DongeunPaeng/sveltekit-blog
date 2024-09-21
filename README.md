@@ -55,32 +55,14 @@ For inquiries or feedback, please use the repository's issues section.
     - [X] Recognise unordered list properly (QuillJS defect)
     - [X] Add tailwind list style to all old posts, too.
 - [X] In TextEditor, I can't see <ul> with tailwind class. Fix this.
-- [X] In TextEditor, I can't see codes. Fix this.
 - [X] Separate public and private.
 - [X] Make the post non-nullable.
 - [X] Get the next and previous posts.
-- [ ] In the post, some images are not shown (429 error).
-- [ ] Search function needs to be finished.
-- [ ] Verify the token properly. (check if login/logout affects parent properly.)
-- [ ] Finish Footer.
-- [ ] Make new categories.
-- [ ] Other TODOs remaining.
-- [ ] Token 만료되면 loggedInUser 없애고 Delete 버튼도 없어야 함.
+- [X] Verify the token properly.
+- [X] Token 만료되면 loggedInUser 없애고 Delete 버튼도 없어야 함.
 - [X] Write and Logout button are hovered together.
-- [ ] Change /test to principles or another page.
-- [ ] Indentation... 이 문제는 나중에 해결하자. Tailwind 자체 결함.
-    - [ ] Second-level indentation
-- [ ] 전반적인 리팩터링 (중복 코드 없애고, 깔끔하게 만들기)
-    - [X] CRUD 과정 복기하기
-    - [ ] Auth 과정 복기하기
-    - [ ] TextEditor 로직 특히 복잡함
-- [ ] Add loading spinner
-- [ ] QC
-- [ ] CI/CD and deployment
-- [ ] Manage DB pool
-- [ ] Disssemble addAge function and show datetime properly for next and previous posts.
+- [X] Dissemble addAge function and show datetime properly for next and previous posts.
 - [X] getPost, getPosts 등등... 레코드 없는 경우 에러 핸들링을 서버로 빼자.
-- [ ] 홈 화면 엄청 오래 걸린다 갑자기. Next, Prev 작업한 이후부터 그럼.
 - [X] Timestamp 관련 의문 해결
     - 현재 DB에는 한국 시간으로 저장돼 있다. 내가 실제로 글을 작성한 시간.
     - 서버에서 글을 불러와 created_at을 확인하면 GMT로 출력된다. 한국 시간이 아니라.
@@ -92,3 +74,36 @@ For inquiries or feedback, please use the repository's issues section.
     - 서버로부터 글을 받아 프론트에 출력하면 GMT+0900 (Korean Standard Time)가 출력된다.
         - 결국 서버에서 UTC 시간을 잘 주었고, 그걸 브라우저 현지 시각으로 표현해주는 것이다.
         - 그러면 애초에 서버에서 왜 정확히 시간을 알고 있는지가 궁금해진다.
+- [X] Render HTML in post previews.
+- [X] In TextEditor, I can't see codes. Fix this.
+- [X] Search function needs to be finished.
+- [X] Finish Footer.
+    - [X] Refactor Tailwind Design
+    - [X] Scroll down
+    - [X] Link
+- [X] Finish Excerpts page.
+    - [X] Change from VARCHAR to MEDIUMTEXT.
+    - [X] Change to 'soft delete'.
+    - [X] Delete action should be refined.
+- [X] Check if the delete confirmation works properly.
+- [ ] Make the list page.
+- [ ] Finish Keough's list.
+- [ ] Finish Munger's list.
+- [ ] Finish Shannon's list.
+- [ ] Finish Simons' list.
+- [ ] Add Photo, Math, and Reading categories.
+- [ ] In the post, some images are not shown (429 error).
+- [ ] Other TODOs remaining.
+- [X] Change /test to principles or another page.
+- [ ] Indentation... 이 문제는 나중에 해결하자. Tailwind 자체 결함.
+    - [ ] Second-level indentation
+- [ ] 전반적인 리팩터링 (중복 코드 없애고, 깔끔하게 만들기)
+    - [X] CRUD 과정 복기하기
+    - [ ] Auth 과정 복기하기
+        - [ ] tokenExpiresAt이 어떻게 쓰이지?
+        - [ ] 현재는 회원이 1명이라고 가정하고 있다. verifiedUser라도 자기 글만 컨트롤할 수 있어야 한다.
+    - [ ] TextEditor 로직 특히 복잡함
+- [ ] Add loading spinner
+- [ ] QC
+- [ ] CI/CD and deployment
+- [ ] Manage DB pool(?)

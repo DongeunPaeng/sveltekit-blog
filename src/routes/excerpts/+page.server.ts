@@ -1,10 +1,14 @@
 import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async () => {
-	let contents = (await db.readTemp() as unknown as any[]);
-	return { contents };
+export const load: PageServerLoad = async ({ parent }) => {
+	const { pageTitle } = await parent();
+	let contents = (await db.readExcerpts() as unknown as any[]);
+	return {
+		pageTitle: `${pageTitle} | 발췌`,
+		contents
+	};
 };
 
 /** @type {import('./$types').Actions} */
@@ -13,7 +17,7 @@ export const actions = {
 		const data = await request.formData();
 		const content = data.get('content') as string;
 		try {
-			await db.createTemp(content);
+			await db.createExcerpt(content);
 			return { success: true };
 		} catch (error: any) {
 			console.log('Create 실패:', error.message);
@@ -24,7 +28,7 @@ export const actions = {
 		const data = await request.formData();
 		const id = data.get('id') as unknown as number;
 		try {
-			await db.deleteTemp(id);
+			await db.deleteExcerpt(id);
 			return { success: true };
 		} catch (error: any) {
 			console.log('Delete 실패:', error.message);

@@ -9,3 +9,11 @@ p a {
 .menu {
     @apply hover:underline hover:text-blue-800 rounded-md sm:text-base font-medium;
 }
+
+.footer-links {
+    @apply rounded-md leading-none text-sm text-gray-600;
+}
+
+.horizontal-limit {
+    @apply max-w-5xl mx-auto px-6 lg:px-8
+}

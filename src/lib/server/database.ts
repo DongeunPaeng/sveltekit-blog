@@ -89,30 +89,30 @@ export const deletePost = async (author: number, postId: number) => {
 	return;
 };
 
-export const readTemp = async () => {
-	const [rows] = await query(`select * from temp`) as ResultSetHeader[];
+export const readExcerpts = async () => {
+	const [rows] = await query(`select * from excerpts where deleted = 0`) as ResultSetHeader[];
 	return rows;
 };
 
-export const readOneTemp = async (id: string) => {
-	const [rows] = await query(`select * from temp where id = ?`, [id]) as ResultSetHeader[];
+export const readOneExcerpt = async (id: string) => {
+	const [rows] = await query(`select * from excerpts where id = ?`, [id]) as ResultSetHeader[];
 	return rows;
 };
 
-export const createTemp = async (content: string) => {
-	const [rows] = await query(`insert into temp (content) values (?)`, [content]) as ResultSetHeader[];
+export const createExcerpt = async (content: string) => {
+	const [rows] = await query(`insert into excerpts (content) values (?)`, [content]) as ResultSetHeader[];
 	if (rows.affectedRows !== 1) throw new Error('영향 받은 데이터가 없습니다.');
 	return;
 };
 
-export const deleteTemp = async (id: number) => {
-	const [rows] = await query(`delete from temp where id = ?`, ['' + id]) as ResultSetHeader[];
+export const deleteExcerpt = async (id: number) => {
+	const [rows] = await query(`update excerpts set deleted = 1 where id = ?`, ['' + id]) as ResultSetHeader[];
 	if (rows.affectedRows !== 1) throw new Error('영향 받은 데이터가 없습니다.');
 	return;
 };
 
-export const editTemp = async (id: number, content: string) => {
-	const [rows] = await query(`update temp set content = ? where id = ?`, [content, '' + id]) as ResultSetHeader[];
+export const editExcerpt = async (id: number, content: string) => {
+	const [rows] = await query(`update excerpts set content = ? where id = ?`, [content, '' + id]) as ResultSetHeader[];
 	if (rows.affectedRows !== 1) throw new Error('영향 받은 데이터가 없습니다.');
 	return;
 };

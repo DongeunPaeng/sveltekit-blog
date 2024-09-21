@@ -10,27 +10,27 @@
 </script>
 
 <svelte:head>
-	<title>TEST</title>
+	<title>{data.pageTitle}</title>
 </svelte:head>
 
-<div class="flex flex-col w-1/2 space-y-5 my-4">
-	<textarea class={readonly ? 'editing' : ''} name="content" id="content" cols="30" rows="10" bind:value={value}
+<div class="flex space-x-2">
+	<textarea class={`border-2 p-2 ${readonly ? 'readonly' : ''}`} name="content" id="content" cols="50" rows="10"
+						bind:value={value}
 						readonly={readonly} />
 	{#if readonly}
-		<button class="bg-amber-300 p-2" on:click={toggleReadonly}>Edit</button>
+		<button on:click={toggleReadonly}>✏️</button>
 	{/if}
 	{#if !readonly}
-		<form class="bg-amber-300 p-2" method="post" action="?/edit">
+		<form method="post" action="?/edit">
 			<input type="text" class="hidden" name="content" value={value}>
 			<input type="number" class="hidden" name="id" value={data.content.id}>
-			<button class="w-full">Save</button>
+			<button>✅</button>
 		</form>
 	{/if}
 </div>
 
 <style>
-    .editing {
-        border: none;
+    .readonly {
         overflow: auto;
         outline: none;
 

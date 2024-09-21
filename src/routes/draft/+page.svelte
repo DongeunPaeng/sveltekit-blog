@@ -10,7 +10,6 @@
 </svelte:head>
 
 <div>
-	<!-- TODO: search feature unfinished -->
 	<input
 		class="mt-4 mb-4 md:w-1/2 w-full p-2 border border-gray-300 rounded-md"
 		type="text"

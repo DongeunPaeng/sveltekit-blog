@@ -10,11 +10,6 @@ declare global {
 		preview?: string;
 	}
 
-	enum Deleted {
-		NO,
-		YES
-	}
-
 	interface User {
 		id: numnber;
 		email: string;

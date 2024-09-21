@@ -4,12 +4,9 @@ import { createToken, verifyPassword, verifyToken } from '$lib/server/auth';
 import { jwtDecode } from 'jwt-decode';
 import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes/draft/$types';
 
-export const prerender = false;
-
 export const load: PageServerLoad = async ({ parent }) => {
 	const { loggedInUser } = await parent();
 	if (loggedInUser) throw redirect(307, '/');
-	console.log('로그인 화면에 진입했습니다.');
 };
 
 /** @type {import('./$types').Actions} */

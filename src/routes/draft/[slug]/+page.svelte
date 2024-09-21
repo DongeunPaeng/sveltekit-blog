@@ -9,5 +9,4 @@
 	<title>{data.pageTitle}</title>
 </svelte:head>
 
-<!-- TODO: pass title props -->
 <TextEditor draft={data.draft} newPost={false} />
