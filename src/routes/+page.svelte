@@ -1,12 +1,26 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { addAge } from '$lib/common';
+	import { page } from '\$app/stores';
+
+	const enum POST_TYPE {
+		GENERAL,
+		STUDY,
+		BOOK_REVIEW,
+		PHOTO
+	}
 
 	export let data: PageData;
+
 	let searchKeyword: string = '';
+	$: type = parseInt($page.url.searchParams.get('type') ?? '0');
+
 	$: filteredPost = data.posts.filter(post =>
-		post.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-		post.post.toLowerCase().includes(searchKeyword.toLowerCase()));
+		(post.type === type) &&
+		(post.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+			post.post.toLowerCase().includes(searchKeyword.toLowerCase()))
+	);
+
 </script>
 
 <svelte:head>

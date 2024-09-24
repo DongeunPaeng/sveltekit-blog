@@ -17,6 +17,7 @@ const enum POST_TYPE {
 	GENERAL,
 	STUDY,
 	BOOK_REVIEW,
+	PHOTO
 }
 
 const query = async (queryString: string, args: string[] = []) => {

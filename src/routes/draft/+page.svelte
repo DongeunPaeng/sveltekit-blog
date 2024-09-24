@@ -2,7 +2,21 @@
 	import type { PageData } from './$types';
 	import { addAge } from '$lib/common';
 
+	const enum POST_TYPE {
+		GENERAL,
+		STUDY,
+		BOOK_REVIEW,
+		PHOTO
+	}
+
 	export let data: PageData;
+
+	let searchKeyword: string = '';
+	$: filteredPost = data.posts.filter(post =>
+		post.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+		post.post.toLowerCase().includes(searchKeyword.toLowerCase())
+	);
+
 </script>
 
 <svelte:head>
@@ -14,10 +28,9 @@
 		class="mt-4 mb-4 md:w-1/2 w-full p-2 border border-gray-300 rounded-md"
 		type="text"
 		placeholder="Search"
-		name=""
-		id=""
+		bind:value={searchKeyword}
 	/>
-	{#each data.posts as post}
+	{#each filteredPost as post}
 		<div id="post_card" class="my-4">
 			<div id="post_title">
 				<a href={`/draft/${post.id}`}>{post.title}</a>
@@ -26,7 +39,7 @@
 				{addAge(post.created_at)}
 			</div>
 			<div id="post_preview" class="text-sm text-gray-600">
-				{post.preview}
+				{@html post.preview}
 				<a href={`/posts/${post.id}`} class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">더 보기</a>
 			</div>
 		</div>

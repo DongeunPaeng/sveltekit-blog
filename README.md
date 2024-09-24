@@ -86,24 +86,19 @@ For inquiries or feedback, please use the repository's issues section.
     - [X] Change to 'soft delete'.
     - [X] Delete action should be refined.
 - [X] Check if the delete confirmation works properly.
-- [ ] Make the list page.
-- [ ] Finish Keough's list.
-- [ ] Finish Munger's list.
-- [ ] Finish Shannon's list.
-- [ ] Finish Simons' list.
-- [ ] Add Photo, Math, and Reading categories.
-- [ ] In the post, some images are not shown (429 error).
-- [ ] Other TODOs remaining.
+- [X] Make the list page.
+- [X] Add Photography, Learning, and Books categories.
 - [X] Change /test to principles or another page.
 - [ ] Indentation... 이 문제는 나중에 해결하자. Tailwind 자체 결함.
     - [ ] Second-level indentation
 - [ ] 전반적인 리팩터링 (중복 코드 없애고, 깔끔하게 만들기)
+    - [ ] Collect types into one file.
     - [X] CRUD 과정 복기하기
     - [ ] Auth 과정 복기하기
         - [ ] tokenExpiresAt이 어떻게 쓰이지?
         - [ ] 현재는 회원이 1명이라고 가정하고 있다. verifiedUser라도 자기 글만 컨트롤할 수 있어야 한다.
-    - [ ] TextEditor 로직 특히 복잡함
-- [ ] Add loading spinner
-- [ ] QC
+    - [ ] TextEditor 리팩터링
+- [ ] QC - 글을 다양하게 써보고, 예전 글 많이 읽어보면서 이상한 곳 확인하기
 - [ ] CI/CD and deployment
 - [ ] Manage DB pool(?)
+- [ ] Add loading spinner (나중에 정 느리면 그 때 하기로 할까?)

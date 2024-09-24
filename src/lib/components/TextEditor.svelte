@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import katex from 'katex';
 	import hljs from 'highlight.js';
-	import { goto, invalidateAll } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import { setAttributeForAll } from '$lib/common';
 
 	export let draft: Post | null;
@@ -121,9 +121,10 @@
 					name="type"
 					id="type"
 				>
-					<option value="GENERAL">General</option>
-					<option value="STUDY">Study</option>
-					<option value="BOOK_REVIEW">Book Review</option>
+					<option value="GENERAL">일반</option>
+					<option value="STUDY">공부</option>
+					<option value="BOOK_REVIEW">독서</option>
+					<option value="PHOTO">사진</option>
 				</select>
 				<select
 					class="py-2 mr-4 text-sm text-gray-900"

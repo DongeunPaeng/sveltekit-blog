@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { applyAction, enhance } from '$app/forms';
-	import { goto } from '\$app/navigation';
+	import { enhance } from '$app/forms';
 
 	export let data: PageData;
 
