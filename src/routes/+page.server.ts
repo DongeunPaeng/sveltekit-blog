@@ -1,10 +1,11 @@
 import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
 import { addPreview } from '$lib/common';
+import type { Post } from '$lib/types';
 
 export const load: PageServerLoad = async () => {
-	const posts = (await db.getPosts()) as Post[];
-	const postsWithPreview: Post[] = posts.map((p: Post) => addPreview(p));
+	const posts: Post[] = (await db.getPosts()) as Post[];
+	const postsWithPreview: (Post & { preview: string })[] = posts.map((p: Post) => addPreview(p));
 
 	return {
 		pageTitle: 'Dongeun Paeng | Home',

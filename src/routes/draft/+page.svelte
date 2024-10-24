@@ -2,13 +2,6 @@
 	import type { PageData } from './$types';
 	import { addAge } from '$lib/common';
 
-	const enum POST_TYPE {
-		GENERAL,
-		STUDY,
-		BOOK_REVIEW,
-		PHOTO
-	}
-
 	export let data: PageData;
 
 	let searchKeyword: string = '';
@@ -16,7 +9,6 @@
 		post.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
 		post.post.toLowerCase().includes(searchKeyword.toLowerCase())
 	);
-
 </script>
 
 <svelte:head>
@@ -40,7 +32,7 @@
 			</div>
 			<div id="post_preview" class="text-sm text-gray-600">
 				{@html post.preview}
-				<a href={`/posts/${post.id}`} class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">더 보기</a>
+				<a href={`/draft/${post.id}`} class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">더 보기</a>
 			</div>
 		</div>
 	{/each}

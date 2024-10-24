@@ -1,5 +1,6 @@
 import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes/$types';
 import { GOOGLE_API_KEY } from '$env/static/private';
+import type { Lists } from '$lib/types';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { pageTitle } = await parent();
@@ -11,7 +12,8 @@ export const load: PageServerLoad = async ({ parent }) => {
 	const response = await fetch(fullUrl);
 	const json = await response.json();
 	const rows = json.values;
-	const lists = rows.reduce((acc, [listName, listItem]) => {
+
+	const lists = rows.reduce((acc: Lists, [listName, listItem]: [string, string]) => {
 		(acc[listName] = acc[listName] || []).push(listItem);
 		return acc;
 	}, {});

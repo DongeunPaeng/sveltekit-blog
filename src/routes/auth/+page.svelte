@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { goto } from '\$app/navigation';
-	import { applyAction, enhance } from '$app/forms';
-
 	export let form;
 </script>
 
@@ -13,13 +10,7 @@
 	<div class="max-w-md w-full space-y-8">
 		<h2 class="text-center text-3xl font-extrabold text-gray-900">어서오세요! 반가워요 👋</h2>
 		<div>
-			<form method="POST" action="?/login" use:enhance={() => async ({result}) => {
-				if (result.type === 'success') {
-					await goto('/', { invalidateAll: true })
-				} else {
-					await applyAction(result)
-				}
-			}} class="mt-8 space-y-6">
+			<form method="POST" action="?/login" class="mt-8 space-y-6">
 				<div class="rounded-md -space-y-px">
 					<div>
 						<label for="email" class="sr-only">Email address</label>

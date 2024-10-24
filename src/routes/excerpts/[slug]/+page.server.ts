@@ -2,14 +2,14 @@ import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
 import { fail, redirect } from '@sveltejs/kit';
 import { verifyToken } from '$lib/server/auth';
+import type { Excerpt } from '$lib/types';
 
 export const load: PageServerLoad = async ({ params, parent }) => {
-	const { loggedInUser, pageTitle } = await parent();
-	if (!loggedInUser) throw redirect(307, '/');
-	const result = await db.readOneExcerpt(params.slug) as unknown as any[];
-	const content = result[0];
+	const { verifiedUser, pageTitle } = await parent();
+	if (!verifiedUser) throw redirect(307, '/');
+	const excerpt = await db.readOneExcerpt(params.slug);
 	return {
-		content,
+		excerpt,
 		pageTitle: `${pageTitle} | 발췌 (수정)`
 	};
 };

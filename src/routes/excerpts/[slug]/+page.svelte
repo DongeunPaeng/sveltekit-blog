@@ -4,7 +4,7 @@
 	export let data: PageData;
 
 	let readonly = true;
-	let value = data.content.content;
+	let value = data.excerpt.content;
 
 	const toggleReadonly = () => readonly = !readonly;
 </script>
@@ -23,7 +23,7 @@
 	{#if !readonly}
 		<form method="post" action="?/edit">
 			<input type="text" class="hidden" name="content" value={value}>
-			<input type="number" class="hidden" name="id" value={data.content.id}>
+			<input type="number" class="hidden" name="id" value={data.excerpt.id}>
 			<button>✅</button>
 		</form>
 	{/if}

@@ -2,18 +2,12 @@
 	import type { PageData } from './$types';
 	import { addAge } from '$lib/common';
 	import { page } from '\$app/stores';
-
-	const enum POST_TYPE {
-		GENERAL,
-		STUDY,
-		BOOK_REVIEW,
-		PHOTO
-	}
+	import { POST_TYPE } from '$lib/types';
 
 	export let data: PageData;
 
 	let searchKeyword: string = '';
-	$: type = parseInt($page.url.searchParams.get('type') ?? '0');
+	$: type = parseInt($page.url.searchParams.get('type') ?? '' + POST_TYPE.GENERAL);
 
 	$: filteredPost = data.posts.filter(post =>
 		(post.type === type) &&

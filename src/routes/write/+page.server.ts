@@ -3,12 +3,11 @@ import { fail, redirect } from '@sveltejs/kit';
 import * as db from '$lib/server/database';
 import { verifyToken } from '$lib/server/auth';
 import { checkEmptyPost } from '$lib/common';
-
-// export const prerender = false;
+import type { VerifiedUser } from '$lib/types';
 
 export const load: PageServerLoad = async ({ parent }) => {
-	const { pageTitle, loggedInUser } = await parent();
-	if (!loggedInUser) throw redirect(307, '/');
+	const { pageTitle, verifiedUser } = await parent();
+	if (!verifiedUser) throw redirect(307, '/');
 
 	return {
 		pageTitle: `${pageTitle} | Write`
@@ -16,16 +15,13 @@ export const load: PageServerLoad = async ({ parent }) => {
 };
 
 export const actions = {
-	write: async ({ request, cookies }) => {
-		const verifiedUser = await verifyToken(cookies.get('user_token') || '');
-		if (!verifiedUser) return fail(500);
-
+	write: async ({ request }) => {
 		const data = await request.formData();
 		const title = data.get('title') as string;
 		const post = data.get('content') as string;
 		const type = data.get('type') as string;
 		const status = data.get('status') as string;
-		const authorId = verifiedUser.sub;
+		const authorId = data.get('authorId') as string;
 
 		if (checkEmptyPost(title)) return fail(400, { incorrect: true, message: '제목을 채워주세요.' });
 		if (checkEmptyPost(post)) return fail(400, { incorrect: true, message: '내용을 채워주세요.' });
@@ -39,9 +35,6 @@ export const actions = {
 		throw redirect(301, '/' as string);
 	},
 	edit: async ({ request, cookies }) => {
-		const verifiedUser = await verifyToken(cookies.get('user_token') || '');
-		if (!verifiedUser) return fail(500);
-
 		const data = await request.formData();
 		const title = data.get('title') as string;
 		const post = data.get('content') as string;

@@ -1,13 +1,13 @@
 import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { pageTitle } = await parent();
-	let contents = (await db.readExcerpts() as unknown as any[]);
+	let excerpts = await db.readExcerpts();
 	return {
 		pageTitle: `${pageTitle} | 발췌`,
-		contents
+		excerpts
 	};
 };
 

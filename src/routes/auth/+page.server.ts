@@ -1,26 +1,23 @@
 import { fail, redirect } from '@sveltejs/kit';
 import * as db from '$lib/server/database';
-import { createToken, verifyPassword, verifyToken } from '$lib/server/auth';
-import { jwtDecode } from 'jwt-decode';
-import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes/draft/$types';
+import { createToken, verifyPassword } from '$lib/server/auth';
+import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = async ({ parent }) => {
-	const { loggedInUser } = await parent();
-	if (loggedInUser) throw redirect(307, '/');
+	const { verifiedUser } = await parent();
+	if (verifiedUser) throw redirect(307, '/');
 };
 
-/** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
 	login: async ({ request, cookies }) => {
 		// Get data
 		const data = await request.formData();
 		const email = data.get('email') as string;
 		const password = data.get('password') as string;
-		const queryResults = await db.getUser(email) as User[];
+		const user = await db.getUser(email);
 
 		// Check if the user exists
-		const user = queryResults[0];
-		if (!user || user['deleted'] === 1)
+		if (!user || user.deleted === 1)
 			return fail(403, { incorrect: true, message: '아이디가 존재하지 않아요.' });
 
 		// Check if the password is valid
@@ -29,17 +26,16 @@ export const actions = {
 			return fail(403, { incorrect: true, message: '비밀번호가 일치하지 않아요.' });
 
 		// Create tokens
-		const token = createToken(user);
-		const tokenExpiresAt = jwtDecode(token).exp;
+		const token: string = createToken(user);
 
 		// Set the tokens in a cookie
 		cookies.set('user_token', token, {
 			maxAge: 168 * 60 * 60 * 1000, // one week
 			httpOnly: true
 		});
-		return { success: true, user: user.email };
+		throw redirect(301, '/' as string);
 	},
-	logout: async ({ cookies }) => {
+	logout: ({ cookies }): void => {
 		cookies.delete('user_token');
 	}
 };

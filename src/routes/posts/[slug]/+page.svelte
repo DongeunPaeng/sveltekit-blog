@@ -6,12 +6,18 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
 	import { addAge } from '$lib/common';
+	import type { Post } from '$lib/types';
 
 	export let data: PageData;
 
 	onMount(() => {
 		hljs.highlightAll();
 	});
+
+	const adjacentPosts: ({ post: Post & { preview: string }, label: string })[] = [
+		data.nextPost && { post: data.nextPost, label: 'NEXT POST' },
+		data.previousPost && { post: data.previousPost, label: 'PREVIOUS POST' }
+	].filter(Boolean);
 </script>
 
 <svelte:head>
@@ -30,7 +36,7 @@
 					{addAge(data.post.created_at)}
 				</div>
 			</div>
-			{#if data.loggedInUser}
+			{#if data.verifiedUser}
 				<div class="flex flex-col items-end ml-4 mb-2 text-sm text-gray-400">
 					<a class="text-gray-400" href={`/draft/${data.post.id}`}>
 						EDIT
@@ -46,7 +52,7 @@
 				}}>
 						<input class="hidden" type="number" name="postId" value={data.post.id} />
 						<input class="hidden" type="number" name="authorId" value={data.post.author} />
-						<input class="hidden" type="number" name="loggedInUserId" value={data?.loggedInUser?.sub} />
+						<input class="hidden" type="number" name="verifiedUserId" value={data?.verifiedUser?.sub} />
 						<button class="text-gray-400">
 							DELETE
 						</button>
@@ -58,32 +64,27 @@
 			{@html data.post.post}
 		</div>
 
-		{#if data.nextPost || data.previousPost}
-			{#each [
-				data.nextPost ? { post: data.nextPost, label: 'NEXT POST' } : null,
-				data.previousPost ? { post: data.previousPost, label: 'PREVIOUS POST' } : null
-			].filter(Boolean) as { post, label }}
-				<div id="recommended_post" class="mt-10 px-4">
-					<p class="text-gray-400 text-sm py-1 border-gray-200 border-0 border-t">
-						{label}
-					</p>
-					<div class="w-full my-4">
-						<a href={`/posts/${post.id}`} class="text-gray-800">
-							<h1>{post.title}</h1>
-						</a>
-						<div class="mb-2 text-sm text-gray-400">
-							{addAge(post.created_at)}
-						</div>
-						<p class="text-sm text-gray-600">
-							{@html post.preview}
-							<a href={`/post/${post.id}`} class="ml-2 text-sm text-gray-400 hover:text-gray-800 underline">
-								더 보기
-							</a>
-						</p>
+		{#each adjacentPosts as { post, label }}
+			<div id="recommended_post" class="mt-10 px-4">
+				<p class="text-gray-400 text-sm py-1 border-gray-200 border-0 border-t">
+					{label}
+				</p>
+				<div class="w-full my-4">
+					<a href={`/posts/${post.id}`} class="text-gray-800">
+						<h1>{post.title}</h1>
+					</a>
+					<div class="mb-2 text-sm text-gray-400">
+						{addAge(post.created_at)}
 					</div>
+					<p class="text-sm text-gray-600">
+						{@html post.preview}
+						<a href={`/post/${post.id}`} class="ml-2 text-sm text-gray-400 hover:text-gray-800 underline">
+							더 보기
+						</a>
+					</p>
 				</div>
-			{/each}
-		{/if}
+			</div>
+		{/each}
 	</div>
 </div>
 

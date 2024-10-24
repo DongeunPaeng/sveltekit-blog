@@ -2,29 +2,18 @@
 	import type { LayoutServerData } from './$types';
 	import '../app.css';
 	import { page } from '\$app/stores';
-
-	const enum POST_TYPE {
-		GENERAL,
-		STUDY,
-		BOOK_REVIEW,
-		PHOTO
-	}
+	import { POST_TYPE, type Page } from '$lib/types';
 
 	export let data: LayoutServerData;
-	const pages = [
-		{
-			name: '책장',
-			href: '/bookshelf'
-		},
-		{
-			name: '발췌',
-			href: '/excerpts'
-		},
-		{
-			name: '각종 목록들',
-			href: '/lists'
-		}
-	];
+
+	const createPages = (...pageEntries: [string, string][]): Array<Page> =>
+		pageEntries.map(([name, href]) => ({ name, href }));
+
+	const pages = createPages(
+		['책장', '/bookshelf'],
+		['발췌', '/excerpts'],
+		['각종 목록들', '/lists']
+	);
 
 	const scrollToBottom = () => {
 		window.scrollTo({
@@ -33,7 +22,7 @@
 		});
 	};
 
-	$: type = $page.url.pathname === '/' && parseInt($page.url.searchParams.get('type') ?? '0');
+	$: type = $page.url.pathname === '/' && parseInt($page.url.searchParams.get('type') ?? '' + POST_TYPE.GENERAL);
 </script>
 
 <svelte:head>
@@ -45,7 +34,7 @@
 		<a class="font-extrabold" href="/">Dongeun Paeng</a>
 		<div id="menu" class="mt-4 py-2 items-center sm:flex sm:justify-between">
 			<div class="flex space-x-4">
-				{#if data.loggedInUser}
+				{#if data.verifiedUser}
 					<a class="text-gray-400 my-auto menu" href="/draft">임시</a>
 				{/if}
 				<a
@@ -63,7 +52,7 @@
 					class={`${type === POST_TYPE.PHOTO && 'font-bold'}`}>사진</span></a>
 			</div>
 
-			{#if data.loggedInUser}
+			{#if data.verifiedUser}
 				<form method="POST" action="/auth?/logout">
 					<div class="flex space-x-4">
 						<a class="menu" href="/write">글쓰기</a>

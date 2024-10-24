@@ -5,89 +5,62 @@
 	import hljs from 'highlight.js';
 	import { goto } from '$app/navigation';
 	import { setAttributeForAll } from '$lib/common';
+	import { page } from '\$app/stores';
+	import { POST_STATUS, POST_TYPE } from '$lib/types.js';
+	import { textEditorConfig } from '$lib/components/textEditorConfig';
+	import { recoverOriginalTags } from '$lib/utils/domManipulation';
+	import { removeQuillUIElements, setEditorContentEditable, formatLists, formatCodeBlocks } from '$lib/utils/domManipulation';
 
-	export let draft: Post | null;
-	export let title = draft?.title;
-	export let content = draft?.post;
-	export let id = draft?.id;
+	export let draft;
 	export let newPost = true;
 
+	const id = draft?.id;
+	const verifiedUser = $page.data.verifiedUser;
+
+	let title = draft?.title;
+	let content = draft?.post;
+	let type = draft?.type;
+	let status = draft?.status;
 	let editor: HTMLElement;
 	let errorMessage: string;
-
-	export let toolbarOptions = [
-		[{ header: [1, 2, false] }],
-		['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block'],
-		[
-			{ list: 'ordered' },
-			{ list: 'bullet' },
-			{ indent: '-1' },
-			{ indent: '+1' }
-		],
-		['link', 'image', 'formula'],
-		[{ align: [] }, { color: [] }, { background: [] }],
-		['clean']
-	];
 
 	onMount(async () => {
 		window.katex = katex;
 		const { default: Quill } = await import('quill');
-
 		const quill = new Quill(editor, {
 			modules: {
 				syntax: { hljs },
-				toolbar: toolbarOptions
+				toolbar: textEditorConfig
 			},
 			theme: 'snow'
 		});
-		quill.root.innerHTML = content
-			?.replaceAll(`<ul`, `<ol`)
-			.replaceAll(`ul>`, `ol>`)
-			.replaceAll(`<pre`, `<div`)
-			.replaceAll(`pre>`, `div>`) || '';
+		quill.root.innerHTML = recoverOriginalTags(content);
 	});
 
-	const removeElementsByClass = (className: string) => {
-		const elements = document.getElementsByClassName(className);
-		while (elements.length > 0) {
-			elements[0].parentNode?.removeChild(elements[0]);
-		}
-	};
-
-	const replaceCodeBlock = (block: Element) => {
-		const language = block.querySelector('.ql-code-block')?.getAttribute('data-language');
-		block.outerHTML = `<div class="ql-code-block-container"><pre class="ql-code-block"><code class="language-${language}">${block.innerText}</code></pre></div>`;
-	};
-
-	const convertOlToUl = (block: Element) => {
-		if (!!block.querySelector('[data-list="bullet"]')) {
-			const ul = document.createElement('ul');
-			ul.innerHTML = block.innerHTML;
-			block.insertAdjacentElement('afterend', ul);
-			block.remove();
-		}
-	};
-
-	const addClass = (block: Element, classNames: string[]) => block.classList.add(...classNames);
-
-	const onSubmit = async (e: SubmitEvent) => {
-		const data = new FormData(e.currentTarget as HTMLFormElement);
-
-		['ql-ui', 'ql-tooltip'].forEach(removeElementsByClass);
-		setAttributeForAll(document.getElementsByClassName('ql-editor'), 'contenteditable', 'false');
-		document.querySelectorAll('ol').forEach(convertOlToUl);
-		document.querySelectorAll('ol').forEach(el => addClass(el, ['list-decimal', 'list-inside']));
-		document.querySelectorAll('ul').forEach(el => addClass(el, ['list-disc', 'list-inside']));
-		document.querySelectorAll('.ql-code-block-container').forEach(replaceCodeBlock);
-
+	const handleSubmit = async (event: { currentTarget: EventTarget & HTMLFormElement }) => {
+		const data = new FormData(event.currentTarget);
+		prepareContentForSubmission();
 		data.append('content', document.querySelector('.ql-editor')?.innerHTML || '');
+		const result = await submitForm(event.currentTarget.action, data);
+		handleSubmissionResult(result);
+	};
 
-		const response = await fetch(e.currentTarget?.action, {
+	const prepareContentForSubmission = () => {
+		removeQuillUIElements();
+		setEditorContentEditable(false);
+		formatLists();
+		formatCodeBlocks();
+	};
+
+	const submitForm = async (action: string, data: FormData) => {
+		const response = await fetch(action, {
 			method: 'POST',
 			body: data
 		});
-		const result = deserialize(await response.text());
+		return deserialize(await response.text());
+	};
 
+	const handleSubmissionResult = (result: any) => {
 		if (result.type === 'redirect') goto(result.location);
 		if (result.type === 'failure') {
 			setAttributeForAll(document.getElementsByClassName('ql-editor'), 'contenteditable', 'true');
@@ -100,9 +73,10 @@
 
 <div class="flex items-start justify-center py-12">
 	<div class="w-full">
-		<form action={newPost ? "write?/write" : "/write?/edit"} on:submit|preventDefault={onSubmit}>
+		<form action={newPost ? "write?/write" : "/write?/edit"} on:submit|preventDefault={handleSubmit}>
 			<div class="text-sm text-gray-500 mb-1">Title</div>
 			<input type="number" id="postId" name="postId" class="hidden" value={newPost ? null : id}>
+			<input type="number" id="authorId" name="authorId" class="hidden" value={verifiedUser.sub}>
 			<input
 				id="title"
 				class="focus:outline-none caret-black mb-4 relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900"
@@ -121,18 +95,18 @@
 					name="type"
 					id="type"
 				>
-					<option value="GENERAL">일반</option>
-					<option value="STUDY">공부</option>
-					<option value="BOOK_REVIEW">독서</option>
-					<option value="PHOTO">사진</option>
+					<option value="GENERAL" selected={type === POST_TYPE.GENERAL}>일반</option>
+					<option value="STUDY" selected={type === POST_TYPE.STUDY}>공부</option>
+					<option value="BOOK_REVIEW" selected={type === POST_TYPE.BOOK_REVIEW}>독서</option>
+					<option value="PHOTO" selected={type === POST_TYPE.PHOTO}>사진</option>
 				</select>
 				<select
 					class="py-2 mr-4 text-sm text-gray-900"
 					name="status"
 					id="status"
 				>
-					<option value="PUBLIC">Public</option>
-					<option value="PRIVATE">Private</option>
+					<option value="PUBLIC" selected={status === POST_STATUS.PUBLIC}>Public</option>
+					<option value="PRIVATE" selected={status === POST_STATUS.PRIVATE}>Private</option>
 				</select>
 				<button
 					class="bg-gray-200 text-sm text-gray-900 py-2 px-3 rounded-md"

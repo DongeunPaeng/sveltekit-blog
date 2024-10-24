@@ -4,7 +4,7 @@ import { fail } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	try {
-		const { pageTitle, loggedInUser } = await parent();
+		const { pageTitle, verifiedUser } = await parent();
 		const baseUrl: string = 'https://sheets.googleapis.com/v4/spreadsheets/';
 		const spreadsheetId: string = '1e3iKWRYHLQgT_xxEpoyVyS8YhPZq_BMZZo856krlhcc/';
 		const range: string = 'Books!A:K';

@@ -59,7 +59,7 @@ For inquiries or feedback, please use the repository's issues section.
 - [X] Make the post non-nullable.
 - [X] Get the next and previous posts.
 - [X] Verify the token properly.
-- [X] Token 만료되면 loggedInUser 없애고 Delete 버튼도 없어야 함.
+- [X] Token 만료되면 verifiedUser 없애고 Delete 버튼도 없어야 함.
 - [X] Write and Logout button are hovered together.
 - [X] Dissemble addAge function and show datetime properly for next and previous posts.
 - [X] getPost, getPosts 등등... 레코드 없는 경우 에러 핸들링을 서버로 빼자.
@@ -89,16 +89,21 @@ For inquiries or feedback, please use the repository's issues section.
 - [X] Make the list page.
 - [X] Add Photography, Learning, and Books categories.
 - [X] Change /test to principles or another page.
+- [ ] 전반적인 리팩터링 (중복 코드 없애고, 깔끔하게 만들기)
+    - [X] Remove all custom types and make shared type files.
+    - [X] CRUD 과정 복기하기
+    - [X] Auth 과정 복기하기
+        - [X] tokenExpiresAt이 어떻게 쓰이지?
+        - [X] 현재는 회원이 1명이라고 가정하고 있다. verifiedUser라도 자기 글만 컨트롤할 수 있어야 한다.
+    - [ ] TextEditor 리팩터링
+        - [X] 이전 status 및 type 받아오기
+        - [ ] Reduce the number of lines
+- [X] Footer에서 disc 생길 때도 있고 아닐 때도 있는데 이유가 뭘까? 고치자.
+- [X] Unauthorised user가 slug로 draft에 직접 접근 시 방어
+- [ ] Manage DB pool(?)
+    - [ ] Check if the connection is properly released.
+- [ ] CI/CD and deployment
+- [ ] QC - 글을 다양하게 써보고, 예전 글 많이 읽어보면서 이상한 곳 확인하기
+- [ ] Add loading spinner (나중에 정 느리면 그 때 하기로 할까?)
 - [ ] Indentation... 이 문제는 나중에 해결하자. Tailwind 자체 결함.
     - [ ] Second-level indentation
-- [ ] 전반적인 리팩터링 (중복 코드 없애고, 깔끔하게 만들기)
-    - [ ] Collect types into one file.
-    - [X] CRUD 과정 복기하기
-    - [ ] Auth 과정 복기하기
-        - [ ] tokenExpiresAt이 어떻게 쓰이지?
-        - [ ] 현재는 회원이 1명이라고 가정하고 있다. verifiedUser라도 자기 글만 컨트롤할 수 있어야 한다.
-    - [ ] TextEditor 리팩터링
-- [ ] QC - 글을 다양하게 써보고, 예전 글 많이 읽어보면서 이상한 곳 확인하기
-- [ ] CI/CD and deployment
-- [ ] Manage DB pool(?)
-- [ ] Add loading spinner (나중에 정 느리면 그 때 하기로 할까?)
