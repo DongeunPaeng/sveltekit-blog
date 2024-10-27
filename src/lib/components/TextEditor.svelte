@@ -9,7 +9,12 @@
 	import { POST_STATUS, POST_TYPE } from '$lib/types.js';
 	import { textEditorConfig } from '$lib/components/textEditorConfig';
 	import { recoverOriginalTags } from '$lib/utils/domManipulation';
-	import { removeQuillUIElements, setEditorContentEditable, formatLists, formatCodeBlocks } from '$lib/utils/domManipulation';
+	import {
+		removeQuillUIElements,
+		setEditorContentEditable,
+		formatLists,
+		formatCodeBlocks
+	} from '$lib/utils/domManipulation';
 
 	export let draft;
 	export let newPost = true;
@@ -17,10 +22,7 @@
 	const id = draft?.id;
 	const verifiedUser = $page.data.verifiedUser;
 
-	let title = draft?.title;
-	let content = draft?.post;
-	let type = draft?.type;
-	let status = draft?.status;
+	let { title, post: content, type, status } = draft || {};
 	let editor: HTMLElement;
 	let errorMessage: string;
 
@@ -36,21 +38,6 @@
 		});
 		quill.root.innerHTML = recoverOriginalTags(content);
 	});
-
-	const handleSubmit = async (event: { currentTarget: EventTarget & HTMLFormElement }) => {
-		const data = new FormData(event.currentTarget);
-		prepareContentForSubmission();
-		data.append('content', document.querySelector('.ql-editor')?.innerHTML || '');
-		const result = await submitForm(event.currentTarget.action, data);
-		handleSubmissionResult(result);
-	};
-
-	const prepareContentForSubmission = () => {
-		removeQuillUIElements();
-		setEditorContentEditable(false);
-		formatLists();
-		formatCodeBlocks();
-	};
 
 	const submitForm = async (action: string, data: FormData) => {
 		const response = await fetch(action, {
@@ -68,6 +55,17 @@
 			alert(errorMessage);
 		}
 		applyAction(result);
+	};
+
+	const handleSubmit = async (event: { currentTarget: EventTarget & HTMLFormElement }) => {
+		const data = new FormData(event.currentTarget);
+		removeQuillUIElements();
+		setEditorContentEditable(false);
+		formatLists();
+		formatCodeBlocks();
+		data.append('content', document.querySelector('.ql-editor')?.innerHTML || '');
+		const result = await submitForm(event.currentTarget.action, data);
+		handleSubmissionResult(result);
 	};
 </script>
 

@@ -3,6 +3,8 @@
 	import { addAge } from '$lib/common';
 	import { page } from '\$app/stores';
 	import { POST_TYPE } from '$lib/types';
+	import { navigating } from '$app/stores';
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 
 	export let data: PageData;
 

@@ -18,7 +18,7 @@ export const convertOlToUl = (block: Element) => {
 
 export const replaceCodeBlock = (block: Element) => {
 	const language = block.querySelector('.ql-code-block')?.getAttribute('data-language');
-	block.outerHTML = `<div class="ql-code-block-container"><pre class="ql-code-block"><code class="language-${language}">${block.innerText}</code></pre></div>`;
+	block.outerHTML = `<div class="ql-code-block-container"><pre class="ql-code-block"><code class="language-${language}">${block.textContent}</code></pre></div>`;
 };
 
 export const addClass = (block: Element, classNames: string[]) => block.classList.add(...classNames);

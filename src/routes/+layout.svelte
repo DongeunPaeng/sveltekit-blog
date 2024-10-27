@@ -3,6 +3,8 @@
 	import '../app.css';
 	import { page } from '\$app/stores';
 	import { POST_TYPE, type Page } from '$lib/types';
+	import { navigating } from '$app/stores';
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 
 	export let data: LayoutServerData;
 
@@ -62,6 +64,11 @@
 			{/if}
 		</div>
 	</div>
+	{#if $navigating}
+		<div class="w-full h-screen pb-80 flex items-center justify-center">
+			<LoadingSpinner />
+		</div>
+	{/if}
 	<div id="slot" class="w-full pb-14">
 		<slot />
 	</div>

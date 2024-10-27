@@ -89,21 +89,23 @@ For inquiries or feedback, please use the repository's issues section.
 - [X] Make the list page.
 - [X] Add Photography, Learning, and Books categories.
 - [X] Change /test to principles or another page.
-- [ ] 전반적인 리팩터링 (중복 코드 없애고, 깔끔하게 만들기)
+- [X] 전반적인 리팩터링 (중복 코드 없애고, 깔끔하게 만들기)
     - [X] Remove all custom types and make shared type files.
     - [X] CRUD 과정 복기하기
     - [X] Auth 과정 복기하기
         - [X] tokenExpiresAt이 어떻게 쓰이지?
         - [X] 현재는 회원이 1명이라고 가정하고 있다. verifiedUser라도 자기 글만 컨트롤할 수 있어야 한다.
-    - [ ] TextEditor 리팩터링
+    - [X] TextEditor 리팩터링
         - [X] 이전 status 및 type 받아오기
-        - [ ] Reduce the number of lines
+        - [X] Reduce the number of lines
 - [X] Footer에서 disc 생길 때도 있고 아닐 때도 있는데 이유가 뭘까? 고치자.
 - [X] Unauthorised user가 slug로 draft에 직접 접근 시 방어
-- [ ] Manage DB pool(?)
-    - [ ] Check if the connection is properly released.
+- [X] Manage DB pool(?)
+    - [X] Check if the connection is properly released.
+- [X] Add loading spinner
 - [ ] CI/CD and deployment
-- [ ] QC - 글을 다양하게 써보고, 예전 글 많이 읽어보면서 이상한 곳 확인하기
-- [ ] Add loading spinner (나중에 정 느리면 그 때 하기로 할까?)
+
+## NOT TO DO (for now)
+
 - [ ] Indentation... 이 문제는 나중에 해결하자. Tailwind 자체 결함.
     - [ ] Second-level indentation
