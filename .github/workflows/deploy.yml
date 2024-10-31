@@ -1,0 +1,67 @@
+name: Deploy to Amazon ECS
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  AWS_REGION: ap-northeast-2
+  S3BUCKET: github-actions-deploy-sveltekit
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: "21.7.3"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install dependencies and build
+        run: |
+          pnpm install
+          pnpm run build
+
+      - name: Copy appspec.yml and scripts to build folder
+        run: |
+          cp appspec.yml build/
+          cp -r infra/scripts build/
+
+      - name: Make a zip file
+        run: zip -r build-${{ github.sha }}.zip build/
+
+      - name: Upload versioned build.zip to S3
+        run: |
+          aws s3 cp build-${{ github.sha }}.zip s3://${{ env.S3BUCKET }}/build-${{ github.sha }}.zip
+
+#      - name: Create AWS CodeDeploy deployment
+#        run: |
+#          DEPLOYMENT_ID=$(aws deploy create-deployment \
+#            --application-name blog-sveltekit \
+#            --deployment-config-name CodeDeployDefault.AllAtOnce \
+#            --deployment-group-name blog-sveltekit-deploy-group \
+#            --s3-location bucket=${{ env.S3BUCKET }},bundleType=zip,key=build-${{ github.sha }}.zip \
+#            --query "deploymentId" \
+#            --output text)
+#
+#          echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
+#
+#      - name: Wait for deployment to complete
+#        run: |
+#          aws deploy wait deployment-successful --deployment-id $DEPLOYMENT_ID

@@ -104,6 +104,9 @@ For inquiries or feedback, please use the repository's issues section.
     - [X] Check if the connection is properly released.
 - [X] Add loading spinner
 - [ ] CI/CD and deployment
+    - [ ] deploy.yml 작성 중...
+- [ ] 글을 쓰고 나면 Footer 목록에 구두점이 생긴다.
+- [ ] 글 저장할 때 화면이 아래로 꺼지는 현상이 있는데 loading spinner 코드 수정하자.
 
 ## NOT TO DO (for now)
 
