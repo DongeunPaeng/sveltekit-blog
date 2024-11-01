@@ -56,18 +56,18 @@ jobs:
         run: |
           aws s3 cp build-${{ github.sha }}.zip s3://${{ env.S3BUCKET }}/build-${{ github.sha }}.zip
 
-#      - name: Create AWS CodeDeploy deployment
-#        run: |
-#          DEPLOYMENT_ID=$(aws deploy create-deployment \
-#            --application-name blog-sveltekit \
-#            --deployment-config-name CodeDeployDefault.AllAtOnce \
-#            --deployment-group-name blog-sveltekit-deploy-group \
-#            --s3-location bucket=${{ env.S3BUCKET }},bundleType=zip,key=build-${{ github.sha }}.zip \
-#            --query "deploymentId" \
-#            --output text)
-#
-#          echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
-#
-#      - name: Wait for deployment to complete
-#        run: |
-#          aws deploy wait deployment-successful --deployment-id $DEPLOYMENT_ID
+      - name: Create AWS CodeDeploy deployment
+        run: |
+          DEPLOYMENT_ID=$(aws deploy create-deployment \
+            --application-name blog-sveltekit \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --deployment-group-name blog-sveltekit-deploy-group \
+            --s3-location bucket=${{ env.S3BUCKET }},bundleType=zip,key=build-${{ github.sha }}.zip \
+            --query "deploymentId" \
+            --output text)
+
+          echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
+
+      - name: Wait for deployment to complete
+        run: |
+          aws deploy wait deployment-successful --deployment-id $DEPLOYMENT_ID
