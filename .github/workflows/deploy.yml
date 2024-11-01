@@ -7,6 +7,7 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   S3BUCKET: github-actions-deploy-sveltekit
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
 jobs:
   deploy:
