@@ -108,6 +108,7 @@ For inquiries or feedback, please use the repository's issues section.
     - [ ] build 파일을 실행하면 Cross-site POST form submissions are forbidden 에러가 뜬다.
     - [X] 인스턴스 새로 만들기
     - [X] 새 인스턴스에 CodeDeploy 적용하기
+    - [ ] 새 인스턴스에 Nginx 설정하기
     - [ ] 새 인스턴스에 도메인 연결하기
 - [ ] 글을 쓰고 나면 Footer 목록에 구두점이 생긴다.
 - [ ] 글 저장할 때 화면이 아래로 꺼지는 현상이 있는데 loading spinner 코드 수정하자.

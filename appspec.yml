@@ -3,3 +3,12 @@ os: linux
 files:
   - source: /
     destination: /home/ec2-user/sveltekit-test/build
+hooks:
+  BeforeInstall:
+    - location: beforeinstall.sh
+      timeout: 60
+      runas: root
+  AfterInstall:
+    - location: afterinstall.sh
+      timeout: 300
+      runas: root
