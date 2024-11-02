@@ -47,7 +47,7 @@ jobs:
       - name: Copy appspec.yml and scripts to build folder
         run: |
           cp appspec.yml build/
-      #          cp -r infra/scripts build/
+          cp -r infra/scripts build/
 
       - name: Make a zip file
         run: zip -r build-${{ github.sha }}.zip build/
