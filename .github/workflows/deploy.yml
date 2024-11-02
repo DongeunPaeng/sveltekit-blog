@@ -44,10 +44,16 @@ jobs:
           pnpm install
           pnpm run build
 
+      - name: List contents of build folder
+        run: ls -R build
+
       - name: Copy appspec.yml and scripts to build folder
         run: |
           cp appspec.yml build/
           cp -r infra/scripts/ build
+
+      - name: List contents of build folder again
+        run: ls -R build
 
       - name: Make a zip file
         run: zip -r build-${{ github.sha }}.zip build/
