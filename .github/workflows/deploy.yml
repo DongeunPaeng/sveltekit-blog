@@ -42,15 +42,20 @@ jobs:
       - name: Install dependencies and build
         run: |
           pnpm install
-          pnpm run build
+          pnpm build
 
       - name: Copy appspec.yml and scripts to build folder
         run: |
           cp appspec.yml build/
           cp infra/scripts/* build/
 
-      - name: List contents of build folder again
-        run: ls build
+      - name: Copy .svelte-kit directory to build folder
+        run: |
+          cp -r .svelte-kit build/
+
+      - name: Print build directory
+        run: |
+          ls build
 
       - name: Make a zip file
         run: zip -r build-${{ github.sha }}.zip build/
