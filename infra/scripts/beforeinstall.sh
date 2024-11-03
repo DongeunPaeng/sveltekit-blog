@@ -1,2 +1,2 @@
 #!/bin/bash
-rm -rf /home/sveltekit-test/build
+rm -rf /home/ec2-user/sveltekit-test/build
