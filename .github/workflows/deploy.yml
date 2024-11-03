@@ -55,7 +55,7 @@ jobs:
 
       - name: Print build directory
         run: |
-          ls build
+          ls -al build
 
       - name: Make a zip file
         run: zip -r build-${{ github.sha }}.zip build/
