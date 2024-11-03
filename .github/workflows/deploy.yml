@@ -51,7 +51,7 @@ jobs:
 
       - name: Copy .svelte-kit directory to build folder
         run: |
-          cp -r .svelte-kit build/
+          cp -r .svelte-kit/. build/
 
       - name: Print build directory
         run: |
