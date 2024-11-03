@@ -49,13 +49,10 @@ jobs:
           cp appspec.yml build/
           cp infra/scripts/* build/
 
-      - name: Copy .svelte-kit directory to build folder
+      - name: Copy package.json and pnpm-lock.yaml to build folder
         run: |
-          cp -r .svelte-kit/. build/.svelte-kit
-
-      - name: Print build directory
-        run: |
-          ls -al build
+          cp package.json build/
+          cp pnpm-lock.yaml build/
 
       - name: Make a zip file
         run: zip -r build-${{ github.sha }}.zip build/
