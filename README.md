@@ -67,13 +67,11 @@ For inquiries or feedback, please use the repository's issues section.
     - 현재 DB에는 한국 시간으로 저장돼 있다. 내가 실제로 글을 작성한 시간.
     - 서버에서 글을 불러와 created_at을 확인하면 GMT로 출력된다. 한국 시간이 아니라.
         - 서버에서는 어떻게 DB에서 불러온 값이 한국 시간인 걸 아는 걸까?
-        - MySQL 타임존이 Asia/Seoul이고, 그 상태에서 저장된 시각이라서 그 정보를 아는 건가?
         - GPT 왈, 서버는 DB가 보내주는 timestamp가 어떤 타임존에서 작성된 건지 모른다고 한다.
         - 대신, 그 타임존이 "현재 서버 자신이 존재하는 타임존"에서 작성됐을 거라고 추측한다고 한다.
         - 따라서 DB가 보내주는 timestamp가 GMT+9 기준이겠거니 하는 가정을 한다는 것이다.
     - 서버로부터 글을 받아 프론트에 출력하면 GMT+0900 (Korean Standard Time)가 출력된다.
         - 결국 서버에서 UTC 시간을 잘 주었고, 그걸 브라우저 현지 시각으로 표현해주는 것이다.
-        - 그러면 애초에 서버에서 왜 정확히 시간을 알고 있는지가 궁금해진다.
 - [X] Render HTML in post previews.
 - [X] In TextEditor, I can't see codes. Fix this.
 - [X] Search function needs to be finished.
@@ -109,8 +107,8 @@ For inquiries or feedback, please use the repository's issues section.
     - [X] 새 인스턴스에 CodeDeploy 적용하기
     - [X] 새 인스턴스에 Nginx 설정하기
     - [X] 서버에서 자동으로 build 하기
-    - [ ] pm2 실행하기
-    - [ ] 새 인스턴스에 도메인 연결하기
+    - [X] pm2 실행하기
+    - [X] 새 인스턴스에 도메인 연결하기
     - [ ] build 파일을 실행하면 Cross-site POST form submissions are forbidden 에러가 뜬다.
 - [ ] 글을 쓰고 나면 Footer 목록에 구두점이 생긴다.
 - [ ] 글 저장할 때 화면이 아래로 꺼지는 현상이 있는데 loading spinner 코드 수정하자.
