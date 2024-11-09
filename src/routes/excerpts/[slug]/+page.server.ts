@@ -2,7 +2,6 @@ import type { PageServerLoad } from './$types';
 import * as db from '$lib/server/database';
 import { fail, redirect } from '@sveltejs/kit';
 import { verifyToken } from '$lib/server/auth';
-import type { Excerpt } from '$lib/types';
 
 export const load: PageServerLoad = async ({ params, parent }) => {
 	const { verifiedUser, pageTitle } = await parent();
@@ -10,7 +9,7 @@ export const load: PageServerLoad = async ({ params, parent }) => {
 	const excerpt = await db.readOneExcerpt(params.slug);
 	return {
 		excerpt,
-		pageTitle: `${pageTitle} | 발췌 (수정)`
+		pageTitle: `${pageTitle} | 교훈 (수정)`
 	};
 };
 

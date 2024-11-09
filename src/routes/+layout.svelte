@@ -13,7 +13,7 @@
 
 	const pages = createPages(
 		['책장', '/bookshelf'],
-		['발췌', '/excerpts'],
+		['교훈', '/excerpts'],
 		['각종 목록들', '/lists']
 	);
 

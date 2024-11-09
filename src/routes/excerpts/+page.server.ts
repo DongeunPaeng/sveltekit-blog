@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ parent }) => {
 	const { pageTitle } = await parent();
 	let excerpts = await db.readExcerpts();
 	return {
-		pageTitle: `${pageTitle} | 발췌`,
+		pageTitle: `${pageTitle} | 교훈`,
 		excerpts
 	};
 };
