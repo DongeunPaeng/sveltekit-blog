@@ -65,7 +65,7 @@
 		</div>
 	</div>
 	{#if $navigating}
-		<div class="w-full h-screen pb-80 flex items-center justify-center">
+		<div>
 			<LoadingSpinner />
 		</div>
 	{/if}

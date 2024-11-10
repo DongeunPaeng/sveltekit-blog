@@ -1,4 +1,3 @@
-<!-- LoadingSpinner.svelte -->
 <div class="spinner-overlay">
 	<div class="spinner">
 		<div class="bounce1"></div>
@@ -9,7 +8,7 @@
 
 <style>
     .spinner-overlay {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         width: 100%;
