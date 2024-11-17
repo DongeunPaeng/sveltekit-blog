@@ -1,9 +1,5 @@
 <div class="spinner-overlay">
-	<div class="spinner">
-		<div class="bounce1"></div>
-		<div class="bounce2"></div>
-		<div class="bounce3"></div>
-	</div>
+	<div class="spinner"></div>
 </div>
 
 <style>
@@ -17,36 +13,24 @@
         align-items: center;
         justify-content: center;
         pointer-events: none;
+        background-color: rgba(255, 255, 255, 0.8); /* Optional for overlay effect */
     }
 
     .spinner {
+        border: 4px solid rgba(75, 85, 99, 0.2); /* Light grey border */
+        border-top: 4px solid #4b5563; /* Darker grey top border */
+        border-radius: 50%;
         width: 40px;
         height: 40px;
+        animation: spin 1s linear infinite;
     }
 
-    .spinner > div {
-        background-color: #4b5563;
-        width: 25%;
-        height: 25%;
-        border-radius: 50%;
-        display: inline-block;
-        animation: sk-bouncedelay 1.4s infinite ease-in-out both;
-    }
-
-    .bounce1 {
-        animation-delay: -0.32s;
-    }
-
-    .bounce2 {
-        animation-delay: -0.16s;
-    }
-
-    @keyframes sk-bouncedelay {
-        0%, 80%, 100% {
-            transform: scale(0);
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
         }
-        40% {
-            transform: scale(1.0);
+        100% {
+            transform: rotate(360deg);
         }
     }
 </style>

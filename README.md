@@ -109,11 +109,13 @@ For inquiries or feedback, please use the repository's issues section.
     - [X] 서버에서 자동으로 build 하기
     - [X] pm2 실행하기
     - [X] 새 인스턴스에 도메인 연결하기
-- [ ] 글을 쓰고 나면 Footer 목록에 구두점이 생긴다.
 - [X] 글 저장할 때 화면이 아래로 꺼지는 현상이 있는데 loading spinner 코드 수정하자.
+- [ ] 글을 쓰고 나면 Footer 목록에 구두점이 생긴다.
+- [ ] Logging/Monitoring 툴 붙이기
+- [ ] 텍스트에디터에 이미지 업로드 기능 더하기
+- [X] 추가 메뉴 추가하기: Chronology, 누적 방문자 수
 
 ## NOT TO DO (for now)
 
 - [ ] Indentation... 이 문제는 나중에 해결하자. Tailwind 자체 결함.
     - [ ] Second-level indentation
-- [ ] 추가 메뉴: Profile, Chronology, 누적 방문자 수

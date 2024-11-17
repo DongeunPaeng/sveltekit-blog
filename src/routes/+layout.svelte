@@ -14,7 +14,8 @@
 	const pages = createPages(
 		['책장', '/bookshelf'],
 		['교훈', '/excerpts'],
-		['각종 목록들', '/lists']
+		['각종 목록들', '/lists'],
+		['자기소개', '/profile']
 	);
 
 	const scrollToBottom = () => {
@@ -82,16 +83,6 @@
 						</a>
 					</li>
 				{/each}
-				<li>
-					<a
-						href="https://github.com/DongeunPaeng"
-						class="footer-links hover:underline hover:text-blue-800"
-						rel="noreferrer"
-						target="_blank"
-					>
-						자기소개
-					</a>
-				</li>
 			</ul>
 			<button on:click={scrollToBottom}>
 				↓
