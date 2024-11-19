@@ -113,6 +113,7 @@ For inquiries or feedback, please use the repository's issues section.
 - [ ] 글을 쓰고 나면 Footer 목록에 구두점이 생긴다.
 - [ ] Logging/Monitoring 툴 붙이기
 - [ ] 텍스트에디터에 이미지 업로드 기능 더하기
+- [X] 사진 메뉴에서 검색창 없애고 사진과 설명 바로 보여주기
 - [X] 추가 메뉴 추가하기: Chronology, 누적 방문자 수
 
 ## NOT TO DO (for now)
