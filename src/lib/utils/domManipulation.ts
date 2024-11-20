@@ -1,4 +1,4 @@
-import { applyReplacements, setAttributeForAll } from "$lib/common";
+import { applyReplacements, setAttributeForAll } from '$lib/common';
 
 export const removeElementsByClass = (className: string) => {
 	const elements = document.getElementsByClassName(className);
@@ -47,4 +47,11 @@ export const formatLists = () => {
 
 export const formatCodeBlocks = () => {
 	document.querySelectorAll('.ql-code-block-container').forEach(replaceCodeBlock);
+};
+
+export const parseImageUrl = (html: string): string | null => {
+	const parser = new DOMParser();
+	const doc = parser.parseFromString(html, 'text/html');
+	const imgTag = doc.querySelector('img');
+	return imgTag ? imgTag.src : null;
 };

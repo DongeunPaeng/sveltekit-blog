@@ -14,7 +14,6 @@
 		(post.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
 			post.post.toLowerCase().includes(searchKeyword.toLowerCase()))
 	);
-
 </script>
 
 <svelte:head>
@@ -22,7 +21,6 @@
 </svelte:head>
 
 <div>
-	<!-- TODO: 문법 검사해보기 -->
 	{#if type !== POST_TYPE.PHOTO}
 		<input
 			class="mt-4 mb-4 md:w-1/2 w-full p-2 border border-gray-300 rounded-md"
@@ -31,8 +29,8 @@
 			bind:value={searchKeyword}
 		/>
 	{/if}
-	{#each filteredPost as post}
-		{#if type !== POST_TYPE.PHOTO}
+	{#if type !== POST_TYPE.PHOTO}
+		{#each filteredPost as post}
 			<div id="post_card" class="my-4">
 				<div id="post_title">
 					<a href={`/posts/${post.id}`}>{post.title}</a>
@@ -45,13 +43,22 @@
 					<a href={`/posts/${post.id}`} class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">더 보기</a>
 				</div>
 			</div>
-		{:else}
-			<div id="post_card" class="my-4">
-				{@html post.post}
-				<div id="post_date" class="text-gray-400 text-sm mb-2">
-					{post.title}
+		{/each}
+	{:else}
+		<div class="grid md:gap-4 md:grid-cols-2">
+			{#each filteredPost as post}
+				<div class="my-4">
+					{@html post.post}
+					<div class="flex justify-between mb-2 text-sm text-gray-400">
+						<div>
+							{post.title}
+						</div>
+						<a href="http://google.com" target="_blank">
+							크게 보기
+						</a>
+					</div>
 				</div>
-			</div>
-		{/if}
-	{/each}
+			{/each}
+		</div>
+	{/if}
 </div>

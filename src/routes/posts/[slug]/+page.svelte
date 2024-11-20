@@ -70,7 +70,7 @@
 					{label}
 				</p>
 				<div class="w-full my-4">
-					<a href={`/posts/${post.id}`} class="text-gray-800">
+					<a data-sveltekit-reload href={`/posts/${post.id}`} class="text-gray-800">
 						<h1>{post.title}</h1>
 					</a>
 					<div class="mb-2 text-sm text-gray-400">
@@ -78,7 +78,8 @@
 					</div>
 					<p class="text-sm text-gray-600">
 						{@html post.preview}
-						<a href={`/post/${post.id}`} class="ml-2 text-sm text-gray-400 hover:text-gray-800 underline">
+						<a data-sveltekit-reload href={`/post/${post.id}`}
+							 class="ml-2 text-sm text-gray-400 hover:text-gray-800 underline">
 							더 보기
 						</a>
 					</p>
