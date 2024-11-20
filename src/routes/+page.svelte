@@ -21,14 +21,12 @@
 </svelte:head>
 
 <div>
-	{#if type !== POST_TYPE.PHOTO}
-		<input
-			class="mt-4 mb-4 md:w-1/2 w-full p-2 border border-gray-300 rounded-md"
-			type="text"
-			placeholder="Search"
-			bind:value={searchKeyword}
-		/>
-	{/if}
+	<input
+		class="mt-4 mb-4 md:w-1/2 w-full p-2 border border-gray-300 rounded-md"
+		type="text"
+		placeholder="Search"
+		bind:value={searchKeyword}
+	/>
 	{#if type !== POST_TYPE.PHOTO}
 		{#each filteredPost as post}
 			<div id="post_card" class="my-4">
