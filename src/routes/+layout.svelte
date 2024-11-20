@@ -71,7 +71,6 @@
 		</div>
 	{/if}
 	<div id="slot" class="w-full pb-14">
-  <span class="text-xs font-bold">재오픈한 지 얼마 안 돼서 오류가 많습니다. 점차 해결 예정.</span>
 		<slot />
 	</div>
 	<div class="fixed bottom-0 w-full py-2 bg-white border-t border-gray-800">
