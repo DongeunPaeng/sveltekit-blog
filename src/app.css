@@ -11,7 +11,7 @@ p a {
 }
 
 .footer-links {
-    @apply list-none rounded-md leading-none text-sm text-gray-600;
+    @apply rounded-md leading-none text-sm text-gray-600;
 }
 
 .horizontal-limit {

@@ -77,8 +77,9 @@
 		<div class="horizontal-limit flex justify-between items-center">
 			<ul class="flex space-x-3 items-center">
 				{#each pages as page}
-					<li>
-						<a href={page.href} class="footer-links hover:underline hover:text-blue-800">
+					<li class="list-none">
+						<a href={page.href}
+							 class="footer-links hover:underline hover:text-blue-800">
 							{page.name}
 						</a>
 					</li>

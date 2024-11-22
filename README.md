@@ -110,7 +110,7 @@ For inquiries or feedback, please use the repository's issues section.
     - [X] pm2 실행하기
     - [X] 새 인스턴스에 도메인 연결하기
 - [X] 글 저장할 때 화면이 아래로 꺼지는 현상이 있는데 loading spinner 코드 수정하자.
-- [ ] 글을 쓰고 나면 Footer 목록에 구두점이 생긴다.
+- [X] 글을 쓰고 나면 Footer 목록에 구두점이 생긴다.
 - [ ] Logging/Monitoring 툴 붙이기
 - [ ] 텍스트에디터에 이미지 업로드 기능 더하기
 - [X] 사진 메뉴에서 검색창 없애고 사진과 설명 바로 보여주기
