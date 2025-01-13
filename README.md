@@ -115,6 +115,7 @@ For inquiries or feedback, please use the repository's issues section.
 - [ ] 텍스트에디터에 이미지 업로드 기능 더하기
 - [X] 사진 메뉴에서 검색창 없애고 사진과 설명 바로 보여주기
 - [ ] 사진 메뉴에서 사진 클릭하면 사진 url로 보내주기
+- [X] 사진 용량 제한 풀기
 - [X] 추가 메뉴 추가하기: Chronology, 누적 방문자 수
 - [X] Next/Previous post 관련 오류 발생
 
