@@ -13,6 +13,7 @@ env:
   DB_USER: root
   DB_NAME: blog
   GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+  BODY_SIZE_LIMIT: ${{ secrets.BODY_SIZE_LIMIT }}
 
 jobs:
   deploy:
