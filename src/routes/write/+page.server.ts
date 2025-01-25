@@ -51,6 +51,6 @@ export const actions = {
 			console.log('Edit 실패, 사유:', error.message);
 			return fail(500, { incorrect: true, message: error.message });
 		}
-		throw redirect(301, '/' as string);
+		throw redirect(301, `/posts/${postId}` as string);
 	}
 };

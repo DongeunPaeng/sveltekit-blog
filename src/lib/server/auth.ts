@@ -11,12 +11,10 @@ export const verifyToken = (token: string): Promise<string | JwtPayload | undefi
 	new Promise((resolve) => {
 		const decodedToken: JwtPayload | null = token ? jwtDecode(token) : null;
 		if (!decodedToken || !decodedToken.exp) {
-			console.log('decodedToken:', decodedToken);
 			resolve(null);
 			return;
 		}
 		if (decodedToken?.exp! * 1000 < Date.now()) {
-			console.log('Token 만료');
 			resolve(null);
 			return;
 		}
