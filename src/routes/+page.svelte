@@ -7,8 +7,8 @@
 	export let data: PageData;
 
 	let searchKeyword: string = '';
-	$: type = parseInt($page.url.searchParams.get('type') ?? '' + POST_TYPE.GENERAL);
 
+	$: type = parseInt($page.url.searchParams.get('type') ?? '' + POST_TYPE.GENERAL);
 	$: filteredPost = data.posts.filter(post =>
 		(post.type === type) &&
 		(post.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||

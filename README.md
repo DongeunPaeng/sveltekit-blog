@@ -118,7 +118,8 @@ For inquiries or feedback, please use the repository's issues section.
 - [ ] 사진 용량 제한 풀기
 - [X] 추가 메뉴 추가하기: Chronology, 누적 방문자 수
 - [X] Next/Previous post 관련 오류 발생
-- [ ] 홈 화면 fetch 용량이 너무 큰 이유 찾아내기
+- [X] 홈 화면 로딩 속도 개선하기
+    - [X] 차라리 로딩스피너를 개선했다
 - [ ] Edit 후 해당 포스트에 남기
     - [ ] 안 될 때도 있는데 이유 찾기
 - [ ] Write 후 해당 포스트에 남기

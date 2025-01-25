@@ -10,7 +10,7 @@ export const pool: Pool = mysql.createPool({
 	connectionLimit: 10
 });
 
-const query = async (queryString: string, args: string[] = []) => {
+const query = async (queryString: string, args: (string | number)[] = []) => {
 	let connection;
 	try {
 		connection = await pool.getConnection();
@@ -23,7 +23,7 @@ const query = async (queryString: string, args: string[] = []) => {
 };
 
 export const getPosts = async (): Promise<Array<Post>> => {
-	const [rows] = await query(`select * from posts where status = ${POST_STATUS.PUBLIC}`);
+	const [rows] = await query(`select id, author, title, post, created_at, status, type from posts where status = ${POST_STATUS.PUBLIC}`);
 	return rows as Array<Post>;
 };
 
