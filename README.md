@@ -120,9 +120,10 @@ For inquiries or feedback, please use the repository's issues section.
 - [X] Next/Previous post 관련 오류 발생
 - [X] 홈 화면 로딩 속도 개선하기
     - [X] 차라리 로딩스피너를 개선했다
-- [ ] Edit 후 해당 포스트에 남기
+- [X] Edit 후 해당 포스트에 남기
     - [ ] 안 될 때도 있는데 이유 찾기
 - [ ] Write 후 해당 포스트에 남기
+- [ ] 글 저장 속도가 너무 느린데 이유 확인하기
 
 ## NOT TO DO (for now)
 
