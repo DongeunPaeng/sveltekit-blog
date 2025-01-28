@@ -39,11 +39,6 @@
 		quill.root.innerHTML = recoverOriginalTags(content);
 	});
 
-	function logWithTime(message: string) {
-		// 간단히 현재 시간을 찍는 버전
-		console.log(`[${new Date().toISOString()}] ${message}`);
-	}
-
 	const submitForm = async (action: string, data: FormData) => {
 		const response = await fetch(action, {
 			method: 'POST',
@@ -59,24 +54,17 @@
 			errorMessage = result?.data?.message as string;
 			alert(errorMessage);
 		}
-		logWithTime('action 종료');
 		applyAction(result);
 	};
 
 	const handleSubmit = async (event: { currentTarget: EventTarget & HTMLFormElement }) => {
-		logWithTime('handleSubmit');
 		const data = new FormData(event.currentTarget);
 		removeQuillUIElements();
-		logWithTime('removeQuillUIElements');
 		setEditorContentEditable(false);
-		logWithTime('setEditorContentEditable');
 		formatLists();
-		logWithTime('formatLists');
 		formatCodeBlocks();
-		logWithTime('formatCodeBlocks');
 		data.append('content', document.querySelector('.ql-editor')?.innerHTML || '');
 		const result = await submitForm(event.currentTarget.action, data);
-		logWithTime('submitForm');
 		handleSubmissionResult(result);
 	};
 </script>
