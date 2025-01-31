@@ -46,6 +46,7 @@ export const actions = {
 		if (checkEmptyPost(post)) return fail(400, { incorrect: true, message: '글 내용을 채워주세요.' });
 
 		try {
+			console.log('DB에 집어넣는 중...');
 			await db.editPost(title, post, type, status, postId);
 		} catch (error: any) {
 			console.log('Edit 실패, 사유:', error.message);
