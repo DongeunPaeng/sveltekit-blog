@@ -78,7 +78,7 @@
 					</div>
 					<p class="text-sm text-gray-600">
 						{@html post.preview}
-						<a data-sveltekit-reload href={`/post/${post.id}`}
+						<a data-sveltekit-reload href={`/posts/${post.id}`}
 							 class="ml-2 text-sm text-gray-400 hover:text-gray-800 underline">
 							더 보기
 						</a>
