@@ -79,7 +79,7 @@
 	<div id="slot" class="w-full pb-14">
 		<slot />
 	</div>
-	<div class="fixed bottom-0 w-full py-2 bg-white border-t border-gray-800">
+	<div id="top-shadow" class="fixed bottom-0 w-full py-2 bg-white">
 		<div class="horizontal-limit flex justify-between items-center">
 			<ul class="flex space-x-3 items-center">
 				{#each pages as page}
@@ -97,3 +97,9 @@
 		</div>
 	</div>
 </div>
+
+<style>
+    #top-shadow {
+        box-shadow: 0 -10px 20px rgba(0, 0, 0, 0.08);
+    }
+</style>
