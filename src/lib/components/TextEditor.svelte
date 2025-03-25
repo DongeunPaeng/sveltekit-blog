@@ -71,7 +71,7 @@
 
 <div class="flex items-start justify-center py-12">
 	<div class="w-full">
-		<form action={newPost ? "write?/write" : "/write?/edit"} on:submit|preventDefault={handleSubmit}>
+		<form action={newPost ? "/write?/write" : "/write?/edit"} on:submit|preventDefault={handleSubmit}>
 			<div class="text-sm text-gray-500 mb-1">Title</div>
 			<input type="number" id="postId" name="postId" class="hidden" value={newPost ? null : id}>
 			<input type="number" id="authorId" name="authorId" class="hidden" value={verifiedUser.sub}>
