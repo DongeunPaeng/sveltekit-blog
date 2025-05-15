@@ -60,7 +60,7 @@
 				</div>
 			{/if}
 		</div>
-		<div class="mb-4 text-base text-gray-600 leading-[2.0] tracking-tight">
+		<div class="mb-4 text-base text-gray-600 leading-[1.8] tracking-tight">
 			{@html data.post.post}
 		</div>
 
