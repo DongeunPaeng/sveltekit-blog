@@ -15,6 +15,7 @@
 		formatLists,
 		formatCodeBlocks
 	} from '$lib/utils/domManipulation';
+	import imageCompression from 'browser-image-compression';
 
 	export let draft;
 	export let newPost = true;
@@ -25,14 +26,133 @@
 	let { title, post: content, type, status } = draft || {};
 	let editor: HTMLElement;
 	let errorMessage: string;
+	let isUploading = false;
+
+	const ALLOWED_TYPES = [
+		'image/jpeg',
+		'image/png',
+		'image/gif',
+		'image/webp'
+	];
+	const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+	let lastUploadTime = 0;
+	const UPLOAD_RATE_LIMIT_MS = 3000; // 3초에 한 번만 업로드 허용
+
+	function validateImage(file: File) {
+		if (!ALLOWED_TYPES.includes(file.type)) {
+			throw new Error('JPEG, PNG, GIF, WebP 이미지만 업로드할 수 있습니다.');
+		}
+		if (file.size > MAX_SIZE) {
+			throw new Error('이미지 크기는 최대 5MB까지 허용됩니다.');
+		}
+		if (!file.name) {
+			throw new Error('파일명이 올바르지 않습니다.');
+		}
+	}
 
 	onMount(async () => {
-		window.katex = katex;
+		window.katex = katex as any;
 		const { default: Quill } = await import('quill');
+
+		// 커스텀 이미지 핸들러 정의
+		function imageHandler() {
+			if (isUploading) return; // 중복 업로드 방지
+			const now = Date.now();
+			if (now - lastUploadTime < UPLOAD_RATE_LIMIT_MS) {
+				alert('이미지 업로드는 3초에 한 번만 가능합니다.');
+				return;
+			}
+			const input = document.createElement('input');
+			input.setAttribute('type', 'file');
+			input.setAttribute('accept', 'image/*');
+			input.click();
+
+			input.onchange = async () => {
+				const file = input.files?.[0];
+				if (!file) return;
+
+				isUploading = true;
+				const originalButton = document.querySelector('.ql-image');
+				const prevHtml = originalButton ? originalButton.innerHTML : '';
+				if (originalButton) originalButton.innerHTML = '<span class="animate-spin">⏳</span>';
+
+				try {
+					// 1. 클라이언트 이미지 검증
+					validateImage(file);
+
+					// 2. 이미지 압축 (실패 시 원본 사용)
+					let compressedFile = file;
+					try {
+						compressedFile = await imageCompression(file, {
+							maxSizeMB: 1,
+							maxWidthOrHeight: 1920,
+							useWebWorker: true
+						});
+					} catch (compressionError) {
+						console.warn('이미지 압축 실패, 원본 사용:', compressionError);
+					}
+
+					// 4. Presigned URL 발급 API 호출
+					const presignedRes = await fetch('/api/presigned-url', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							fileName: compressedFile.name,
+							fileType: compressedFile.type,
+							fileSize: compressedFile.size
+						})
+					});
+
+					if (!presignedRes.ok) {
+						const errMsg = await presignedRes.text();
+						alert('이미지 업로드 준비 중 오류가 발생했습니다.\n' + errMsg);
+						return;
+					}
+
+					const { url, fields, fileUrl, error } = await presignedRes.json();
+					if (error) {
+						alert(error);
+						return;
+					}
+
+					// 5. S3에 직접 업로드 (FormData 사용)
+					const formData = new FormData();
+					Object.entries(fields).forEach(([k, v]) => formData.append(k, v as string));
+					formData.append('file', compressedFile);
+
+					const uploadRes = await fetch(url, {
+						method: 'POST',
+						body: formData
+					});
+
+					if (!uploadRes.ok) {
+						alert('이미지 업로드에 실패했습니다.');
+						return;
+					}
+
+					// 6. 에디터에 이미지 삽입
+					const range = quill.getSelection();
+					quill.insertEmbed(range ? range.index : 0, 'image', fileUrl);
+					lastUploadTime = Date.now(); // 업로드 성공 시 타임스탬프 갱신
+				} catch (err: any) {
+					alert(err?.message || '알 수 없는 오류로 이미지 업로드에 실패했습니다.');
+					console.error('이미지 업로드 오류:', err);
+				} finally {
+					isUploading = false;
+					if (originalButton) originalButton.innerHTML = prevHtml;
+				}
+			};
+		}
+
 		const quill = new Quill(editor, {
 			modules: {
 				syntax: { hljs },
-				toolbar: textEditorConfig
+				toolbar: {
+					container: textEditorConfig,
+					handlers: {
+						image: imageHandler
+					}
+				}
 			},
 			theme: 'snow'
 		});

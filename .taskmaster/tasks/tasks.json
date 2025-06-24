@@ -1,0 +1,153 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Analyze Current Structure and Requirements",
+        "description": "Analyze the current image upload implementation and QuillJS editor integration to understand how to implement S3 upload functionality.",
+        "details": "1. Locate and review the current QuillJS editor implementation in the codebase\n2. Identify where image upload functionality is currently handled or disabled\n3. Review QuillJS documentation for image handler customization options\n4. Verify AWS account access and S3 bucket availability\n5. Document findings including:\n   - Current editor component structure\n   - Image handling code location\n   - Required changes to enable S3 uploads\n   - AWS resources needed\n\nExpected output: Technical specification document with implementation plan and architecture diagram showing the flow from QuillJS to S3.",
+        "testStrategy": "Create a checklist to verify all required information has been gathered:\n- Confirm access to codebase and identify QuillJS implementation\n- Verify AWS account credentials work\n- Test basic QuillJS image handler in a sandbox environment\n- Document current limitations and requirements for the new implementation",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Configure AWS S3 Bucket and IAM Permissions",
+        "description": "Set up the S3 bucket with appropriate permissions and create IAM user with access keys for image uploads.",
+        "details": "1. Create a new S3 bucket specifically for blog images if not already available\n2. Configure bucket policies:\n   - Set appropriate public/private access controls\n   - Configure CORS to allow uploads from the blog domain\n   - Set up lifecycle rules for potential cleanup\n3. Create IAM user with limited permissions:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:PutObject\",\n        \"s3:GetObject\"\n      ],\n      \"Resource\": \"arn:aws:s3:::bucket-name/*\"\n    }\n  ]\n}\n```\n4. Generate and securely store access keys\n5. Create a simple test script to verify S3 upload functionality works with the credentials",
+        "testStrategy": "1. Write a simple Node.js script to test uploading a sample image to S3\n2. Verify the uploaded image is accessible via the expected URL pattern\n3. Test CORS configuration by simulating a request from the blog domain\n4. Verify IAM permissions are working and properly restricted\n5. Document the bucket name, region, and access patterns for the implementation team",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Implement Backend Presigned URL Generation API",
+        "description": "Create a backend API endpoint that generates presigned URLs for secure client-side S3 uploads.",
+        "details": "1. Create a new API endpoint for generating presigned URLs:\n```javascript\n// Example using Express and AWS SDK v3\nconst { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');\nconst { getSignedUrl } = require('@aws-sdk/s3-request-presigner');\n\napp.post('/api/presigned-url', async (req, res) => {\n  const { fileName, fileType } = req.body;\n  \n  // Generate unique file name to prevent overwrites\n  const uniqueFileName = `${Date.now()}-${fileName}`;\n  \n  const s3Client = new S3Client({\n    region: 'your-region',\n    credentials: {\n      accessKeyId: process.env.AWS_ACCESS_KEY_ID,\n      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY\n    }\n  });\n  \n  const command = new PutObjectCommand({\n    Bucket: 'your-bucket-name',\n    Key: uniqueFileName,\n    ContentType: fileType\n  });\n  \n  try {\n    const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 3600 });\n    res.json({\n      success: true,\n      url: signedUrl,\n      fileUrl: `https://your-bucket-name.s3.your-region.amazonaws.com/${uniqueFileName}`\n    });\n  } catch (error) {\n    console.error('Error generating presigned URL', error);\n    res.status(500).json({ success: false, error: 'Failed to generate upload URL' });\n  }\n});\n```\n2. Implement security measures:\n   - Validate file types (only allow images: jpeg, png, gif, etc.)\n   - Set file size limits\n   - Add authentication to ensure only authorized users can get presigned URLs\n3. Set appropriate CORS headers for the API endpoint\n4. Add error handling and logging",
+        "testStrategy": "1. Unit test the presigned URL generation function with various input parameters\n2. Test API endpoint with valid and invalid requests (wrong file types, oversized files)\n3. Verify URL expiration works as expected\n4. Test authentication requirements\n5. Perform end-to-end test by requesting a URL and uploading a file using it\n6. Verify the uploaded file is accessible at the expected URL",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Set up S3 client configuration and environment variables",
+            "description": "Configure the AWS S3 client and set up necessary environment variables for secure access to S3 services.",
+            "dependencies": [],
+            "details": "1. Create a configuration file for S3 client settings\n2. Set up environment variables for AWS credentials (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY)\n3. Configure the S3 bucket name and region as environment variables\n4. Create a utility function to initialize the S3 client with proper credentials\n5. Implement error handling for missing credentials or configuration",
+            "status": "done",
+            "testStrategy": "Write unit tests to verify the S3 client initializes correctly with mock credentials and throws appropriate errors when credentials are missing."
+          },
+          {
+            "id": 2,
+            "title": "Implement file validation middleware",
+            "description": "Create middleware to validate incoming file requests before generating presigned URLs.",
+            "dependencies": [],
+            "details": "1. Create a middleware function that validates file types (only allow images: jpeg, png, gif, etc.)\n2. Implement file size limit validation\n3. Add validation for file name format and length\n4. Create helper functions to sanitize file names\n5. Return appropriate error responses for invalid requests",
+            "status": "done",
+            "testStrategy": "Test the middleware with various valid and invalid file types, sizes, and names to ensure proper validation."
+          },
+          {
+            "id": 3,
+            "title": "Create authentication middleware for the presigned URL endpoint",
+            "description": "Implement authentication to ensure only authorized users can request presigned URLs.",
+            "dependencies": [],
+            "details": "1. Create middleware to verify user authentication status\n2. Implement JWT token validation\n3. Add role-based access control if needed\n4. Set up rate limiting to prevent abuse\n5. Log authentication attempts for security monitoring",
+            "status": "done",
+            "testStrategy": "Test authentication middleware with valid and invalid tokens, and verify rate limiting functionality."
+          },
+          {
+            "id": 4,
+            "title": "Implement the presigned URL generation endpoint",
+            "description": "Create the API endpoint that generates and returns presigned URLs for S3 uploads.",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "1. Create a POST endpoint at '/api/presigned-url'\n2. Extract and validate file information from request body\n3. Generate unique file names using timestamps and UUIDs\n4. Use the AWS SDK to create presigned URLs with the PutObjectCommand\n5. Return the presigned URL and the final file URL in the response\n6. Set appropriate expiration time for the presigned URL (e.g., 1 hour)",
+            "status": "done",
+            "testStrategy": "Write integration tests that mock the AWS S3 service and verify the endpoint returns valid presigned URLs with proper expiration times."
+          },
+          {
+            "id": 5,
+            "title": "Configure CORS and implement error handling",
+            "description": "Set up CORS headers for the API endpoint and implement comprehensive error handling and logging.",
+            "dependencies": [
+              4
+            ],
+            "details": "1. Configure CORS headers to allow requests from the frontend application\n2. Implement structured error handling for different types of errors (validation, authentication, AWS service)\n3. Create a logging system to track errors and usage patterns\n4. Add request ID tracking for better debugging\n5. Implement graceful error responses with appropriate HTTP status codes\n6. Add monitoring for failed presigned URL generation attempts",
+            "status": "done",
+            "testStrategy": "Test CORS configuration with cross-origin requests and verify error handling by simulating various error conditions (network failures, AWS errors, etc.)."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Customize QuillJS Image Handler",
+        "description": "Modify the QuillJS editor to use a custom image handler that will process image uploads to S3.",
+        "details": "1. Locate the QuillJS editor initialization code\n2. Implement a custom image handler:\n```javascript\n// Example implementation\nconst quill = new Quill('#editor', {\n  modules: {\n    toolbar: {\n      container: [['bold', 'italic'], ['link', 'image']],\n      handlers: {\n        image: imageHandler\n      }\n    }\n  },\n  theme: 'snow'\n});\n\nfunction imageHandler() {\n  const input = document.createElement('input');\n  input.setAttribute('type', 'file');\n  input.setAttribute('accept', 'image/*');\n  input.click();\n  \n  input.onchange = async () => {\n    const file = input.files[0];\n    if (file) {\n      // Show loading indicator\n      const range = quill.getSelection(true);\n      \n      // Call the upload function (to be implemented in Task 5)\n      try {\n        const imageUrl = await uploadImageToS3(file);\n        // Insert the image into the editor\n        quill.insertEmbed(range.index, 'image', imageUrl);\n      } catch (error) {\n        console.error('Error uploading image', error);\n        // Show error notification to user\n        alert('Failed to upload image. Please try again.');\n      }\n    }\n  };\n}\n```\n3. Add loading indicator during upload process\n4. Implement error handling for failed uploads\n5. Consider adding image resize/compress functionality before upload",
+        "testStrategy": "1. Test the custom image handler in isolation with mock upload function\n2. Verify file selection dialog appears when image button is clicked\n3. Test with various image types and sizes\n4. Verify loading indicator appears during upload\n5. Test error handling by simulating upload failures\n6. Verify the image is correctly inserted into the editor after successful upload",
+        "priority": "medium",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Implement S3 Upload Functionality",
+        "description": "Create the frontend logic to request presigned URLs and upload images to S3 from the QuillJS editor.",
+        "details": "1. Implement the uploadImageToS3 function referenced in Task 4:\n```javascript\nasync function uploadImageToS3(file) {\n  // Step 1: Request a presigned URL from the backend\n  const response = await fetch('/api/presigned-url', {\n    method: 'POST',\n    headers: {\n      'Content-Type': 'application/json'\n    },\n    body: JSON.stringify({\n      fileName: file.name,\n      fileType: file.type\n    })\n  });\n  \n  if (!response.ok) {\n    throw new Error('Failed to get upload URL');\n  }\n  \n  const { url, fileUrl } = await response.json();\n  \n  // Step 2: Upload the file directly to S3 using the presigned URL\n  const uploadResponse = await fetch(url, {\n    method: 'PUT',\n    headers: {\n      'Content-Type': file.type\n    },\n    body: file\n  });\n  \n  if (!uploadResponse.ok) {\n    throw new Error('Failed to upload image to S3');\n  }\n  \n  // Step 3: Return the public URL of the uploaded image\n  return fileUrl;\n}\n```\n2. Add validation for file types and sizes before upload\n3. Implement progress indicator for large uploads\n4. Add retry logic for failed uploads\n5. Consider implementing image optimization before upload (resize, compress)\n6. Handle various error scenarios with appropriate user feedback",
+        "testStrategy": "1. Unit test the uploadImageToS3 function with mock API responses\n2. Test with various file types (valid and invalid)\n3. Test with various file sizes including edge cases\n4. Verify error handling works correctly for different failure scenarios\n5. Test network interruptions and retry logic\n6. Perform end-to-end tests with actual S3 uploads\n7. Verify the returned URL is correctly formatted and accessible",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          4
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Implement Security and Optimization Features",
+        "description": "Add security measures and optimizations to the image upload process including file validation, image compression, and error handling.",
+        "details": "1. Implement client-side image validation:\n```javascript\nfunction validateImage(file) {\n  // Check file type\n  const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];\n  if (!validTypes.includes(file.type)) {\n    throw new Error('Invalid file type. Only JPEG, PNG, GIF and WebP images are allowed.');\n  }\n  \n  // Check file size (limit to 5MB)\n  const maxSize = 5 * 1024 * 1024; // 5MB in bytes\n  if (file.size > maxSize) {\n    throw new Error('Image is too large. Maximum size is 5MB.');\n  }\n  \n  return true;\n}\n```\n2. Add image compression using a library like browser-image-compression:\n```javascript\nimport imageCompression from 'browser-image-compression';\n\nasync function compressImage(file) {\n  const options = {\n    maxSizeMB: 1,\n    maxWidthOrHeight: 1920,\n    useWebWorker: true\n  };\n  \n  try {\n    return await imageCompression(file, options);\n  } catch (error) {\n    console.error('Error compressing image', error);\n    // Fall back to original file if compression fails\n    return file;\n  }\n}\n```\n3. Implement proper error handling and user feedback\n4. Add logging for upload failures to help with debugging\n5. Implement rate limiting to prevent abuse\n6. Consider adding watermarking or other image processing if required",
+        "testStrategy": "1. Test validation function with various file types and sizes\n2. Verify compression works correctly and reduces file size\n3. Test with various image dimensions and formats\n4. Verify error messages are clear and helpful\n5. Test rate limiting by simulating multiple rapid uploads\n6. Verify logs contain sufficient information for debugging\n7. Performance test to ensure compression doesn't significantly delay the upload process",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Test, Document and Deploy",
+        "description": "Perform comprehensive testing across different devices and browsers, create documentation, and deploy the feature to production.",
+        "details": "1. Create a test plan covering:\n   - Desktop browsers (Chrome, Firefox, Safari, Edge)\n   - Mobile browsers (iOS Safari, Android Chrome)\n   - Various image types and sizes\n   - Error scenarios and edge cases\n2. Perform manual testing following the test plan\n3. Create user documentation explaining the image upload feature\n4. Create technical documentation for future maintenance:\n   - Architecture overview\n   - S3 bucket configuration\n   - Security considerations\n   - Known limitations\n5. Prepare deployment plan:\n   - Database migrations if needed\n   - AWS configuration changes\n   - Feature flags for gradual rollout\n6. Deploy to staging environment for final testing\n7. Deploy to production with monitoring in place",
+        "testStrategy": "1. Create a comprehensive test matrix covering all supported browsers and devices\n2. Test image uploads with various connection speeds (use network throttling)\n3. Verify all error handling works as expected\n4. Perform load testing to ensure the system can handle multiple concurrent uploads\n5. Conduct user acceptance testing with real users if possible\n6. Monitor error rates and performance metrics after deployment\n7. Create a rollback plan in case issues are discovered in production",
+        "priority": "low",
+        "dependencies": [
+          6
+        ],
+        "status": "done",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-06-18T14:28:09.437Z",
+      "updated": "2025-06-24T17:23:36.888Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
