@@ -50,7 +50,8 @@
 									class="h-5 w-5"
 									xmlns="http://www.w3.org/2000/svg"
 									viewBox="0 0 20 20"
-									fill="rgb(107 114 128 / var(--tw-text-opacity))"
+									style="--tw-text-opacity: 1;"
+									fill="rgb(107 114 128)"
 									aria-hidden="true"
 								>
 									<path

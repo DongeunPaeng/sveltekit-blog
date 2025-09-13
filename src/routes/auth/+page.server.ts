@@ -5,6 +5,7 @@ import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = async ({ parent }) => {
 	const { verifiedUser } = await parent();
+	console.log(verifiedUser);
 	if (verifiedUser) throw redirect(307, '/');
 };
 
@@ -31,11 +32,12 @@ export const actions: Actions = {
 		// Set the tokens in a cookie
 		cookies.set('user_token', token, {
 			maxAge: 168 * 60 * 60 * 1000, // one week
-			httpOnly: true
+			httpOnly: true,
+			path: '/'
 		});
 		throw redirect(301, '/' as string);
 	},
 	logout: ({ cookies }): void => {
-		cookies.delete('user_token');
+		cookies.delete('user_token', { path: '/' });
 	}
 };
