@@ -70,19 +70,16 @@
 					{label}
 				</p>
 				<div class="w-full my-4">
-					<a data-sveltekit-reload href={`/posts/${post.id}`} class="text-gray-800">
-						<h1>{post.title}</h1>
-					</a>
-					<div class="mb-2 text-sm text-gray-400">
+					<div id="post_title">
+						<a href={`/posts/${post.id}`}>{post.title}</a>
+					</div>
+					<div id="post_date" class="text-gray-400 text-sm mb-2">
 						{addAge(post.created_at)}
 					</div>
-					<p class="text-sm text-gray-600">
+					<div id="post_preview" class="text-sm text-gray-600">
 						{@html post.preview}
-						<a data-sveltekit-reload href={`/posts/${post.id}`}
-							 class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">
-							더 보기
-						</a>
-					</p>
+						<a href={`/posts/${post.id}`} class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">더 보기</a>
+					</div>
 				</div>
 			</div>
 		{/each}
