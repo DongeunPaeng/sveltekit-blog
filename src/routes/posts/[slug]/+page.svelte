@@ -65,7 +65,7 @@
 		</div>
 
 		{#each adjacentPosts as { post, label }}
-			<div id="recommended_post" class="mt-10 px-4">
+			<div id="recommended_post" class="mt-10">
 				<p class="text-gray-400 text-sm py-1 border-gray-200 border-0 border-t">
 					{label}
 				</p>
@@ -79,7 +79,7 @@
 					<p class="text-sm text-gray-600">
 						{@html post.preview}
 						<a data-sveltekit-reload href={`/posts/${post.id}`}
-							 class="ml-2 text-sm text-gray-400 hover:text-gray-800 underline">
+							 class="ml-1 text-sm text-gray-400 hover:text-gray-800 underline">
 							더 보기
 						</a>
 					</p>
