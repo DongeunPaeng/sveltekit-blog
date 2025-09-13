@@ -2,6 +2,8 @@ import type { PageServerLoad } from '../../../.svelte-kit/types/src/routes/$type
 import { GOOGLE_API_KEY } from '$env/static/private';
 import { fail } from '@sveltejs/kit';
 
+type Book = { 단계: string } & Record<string, string>
+
 export const load: PageServerLoad = async ({ parent }) => {
 	try {
 		const { pageTitle, verifiedUser } = await parent();
@@ -13,14 +15,12 @@ export const load: PageServerLoad = async ({ parent }) => {
 		const response = await fetch(fullUrl);
 		const json = await response.json();
 		const [columnName, ...rows] = json.values;
-		const books = rows.map((row: Array<string>) => (
-			row.reduce((a, b, index) => {
-				return { ...a, [columnName[index]]: b };
-			}, {})
-		));
+		const books: Book[] = rows.map((row: Array<string>) => (
+			row.reduce((a, b, index) => ({ ...a, [columnName[index]]: b }), {})));
+		const filteredBooks = books.filter(book => book['단계'] === '완독');
 		return {
 			pageTitle: `${pageTitle} | 책장`,
-			books
+			books: filteredBooks
 		};
 	} catch (error: any) {
 		return fail(500, { incorrect: true, message: error.message });
